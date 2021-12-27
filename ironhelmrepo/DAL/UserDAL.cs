@@ -23,12 +23,16 @@ namespace Iron_helm_order_mgt.DAL
             dt.Columns.Add("userId", typeof(string));
             dt.Columns.Add("userType", typeof(string));
             var query = from user in context.Users.AsEnumerable()
-                        where user.userId == username
+                        where user.userId == username 
+                        && user.password==password 
                         select dt.LoadDataRow(new object[] {
                             user.userId,
                             user.userType
                             }, false);
-            query.CopyToDataTable();
+           // if (query != null && query.Any())
+           // {
+                query?.CopyToDataTable();
+          //  }
 
 
             return dt;

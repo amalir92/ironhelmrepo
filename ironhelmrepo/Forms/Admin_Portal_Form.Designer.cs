@@ -40,16 +40,15 @@
             this.orders_lbl.AutoSize = true;
             this.orders_lbl.Location = new System.Drawing.Point(23, 56);
             this.orders_lbl.Name = "orders_lbl";
-            this.orders_lbl.Size = new System.Drawing.Size(57, 13);
+            this.orders_lbl.Size = new System.Drawing.Size(0, 13);
             this.orders_lbl.TabIndex = 0;
-            this.orders_lbl.Text = "Orders List";
             // 
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(26, 85);
+            this.dataGridView1.Location = new System.Drawing.Point(26, 89);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(736, 437);
+            this.dataGridView1.Size = new System.Drawing.Size(859, 437);
             this.dataGridView1.TabIndex = 1;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
@@ -65,7 +64,7 @@
             // 
             // refresh_btn
             // 
-            this.refresh_btn.Location = new System.Drawing.Point(687, 56);
+            this.refresh_btn.Location = new System.Drawing.Point(26, 51);
             this.refresh_btn.Name = "refresh_btn";
             this.refresh_btn.Size = new System.Drawing.Size(75, 23);
             this.refresh_btn.TabIndex = 3;
@@ -77,7 +76,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(843, 578);
+            this.ClientSize = new System.Drawing.Size(917, 578);
             this.Controls.Add(this.refresh_btn);
             this.Controls.Add(this.process_btn);
             this.Controls.Add(this.dataGridView1);

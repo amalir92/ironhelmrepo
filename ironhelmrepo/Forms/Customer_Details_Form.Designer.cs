@@ -36,9 +36,9 @@ namespace Iron_helm_order_mgt.Forms
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(37, 75);
+            this.dataGridView1.Location = new System.Drawing.Point(42, 66);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(549, 244);
+            this.dataGridView1.Size = new System.Drawing.Size(443, 244);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
@@ -46,7 +46,7 @@ namespace Iron_helm_order_mgt.Forms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(644, 364);
+            this.ClientSize = new System.Drawing.Size(532, 372);
             this.Controls.Add(this.dataGridView1);
             this.Name = "Customer_Details_Form";
             this.Text = "Customer_Details_Form";

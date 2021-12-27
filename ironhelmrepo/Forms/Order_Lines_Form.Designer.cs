@@ -56,14 +56,14 @@ namespace Iron_helm_order_mgt.Forms
             this.orderLinesGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.orderLinesGrid.Location = new System.Drawing.Point(12, 67);
             this.orderLinesGrid.Name = "orderLinesGrid";
-            this.orderLinesGrid.Size = new System.Drawing.Size(569, 313);
+            this.orderLinesGrid.Size = new System.Drawing.Size(385, 313);
             this.orderLinesGrid.TabIndex = 2;
             // 
             // Order_Lines_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(593, 405);
+            this.ClientSize = new System.Drawing.Size(415, 405);
             this.Controls.Add(this.orderLinesGrid);
             this.Controls.Add(this.order_lbl);
             this.Controls.Add(this.orderNo);

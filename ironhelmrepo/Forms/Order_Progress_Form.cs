@@ -1,6 +1,8 @@
 ﻿using Iron_helm_order_mgt.Entities;
 using Iron_helm_order_mgt.Factory;
 using Iron_helm_order_mgt.Service;
+using ironhelmrepo.Presenters;
+using ironhelmrepo.Views;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,55 +15,40 @@ using System.Windows.Forms;
 
 namespace Iron_helm_order_mgt.Forms
 {
-    public partial class Order_Progress_Form : Form
+    public partial class Order_Progress_Form : Form,IProcessOrderView
     {
         private Order order;
-        private CustomerService customerService;
-        private OrderService orderService;
-        private OrderLineItemService orderLineItemService;
-        private ProductService productService;
+        private ProcessOrderPresenter presenter = null;
+
+        Order IProcessOrderView.order
+        {
+            get { return order; }
+            set { }
+        }
+
         public Order_Progress_Form(Order order)
         {
             InitializeComponent();
             this.order = order;
-            customerService = new CustomerService();
-            orderService = new OrderService();
-            orderLineItemService = new OrderLineItemService();
-            productService = new ProductService();
+            order_txt.Text = order.orderId.ToString();
+            order_txt.Enabled = false;
+            presenter = new ProcessOrderPresenter(this);
         }
 
         public void order_process()
         {
-            Customer customer = customerService.getCustomerById(order.ClientId);
-            List< OrderLineItem> lines= orderLineItemService.getOrderLinesById(order.orderId);
-            List<ProductCatalog> products = new List<ProductCatalog>();
-            foreach(OrderLineItem l in lines)
-            {
-                products.Add(productService.getProductById(l.productCode));
-            }
-
-            string customerSource = Enum.GetName(typeof(CustomerSource),customer.customerSource);
-            if (customerSource == "STATE")
-            {
-                IProductionFactory factory = new GovernmentItemProductionFactory();
-                ClientOrder storder = new ClientOrder(factory, products);
-            }
-            if (customerSource == "ENTERTAINMENT")
-            {
-                IProductionFactory factory = new MovieItemProductionFactory();
-                ClientOrder mvorder = new ClientOrder(factory, products);
-            }
+            presenter.initiateProduction();
         }
 
         private void start_btn_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Order Production Started!");
-            orderService.progressOrder(order.orderStatus, order.orderId);
+            string factory= presenter.progressOrder();
+            MessageBox.Show("Order Production Started in "+factory+"... check the console for produced items and completed services");
             progressBar1.Value = 3;
             order_process();
             progressBar1.Value = 100;
-            
-            orderService.completeOrder(order.orderStatus, order.orderId);
+
+            presenter.completeOrder();
             MessageBox.Show("Order completed!");
         }
 

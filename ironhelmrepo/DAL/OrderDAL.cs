@@ -25,10 +25,11 @@ namespace Iron_helm_order_mgt.DAL
         public DataTable getCustomerById(String clientId)
         {
             DataTable dt = new DataTable();
-            dt.Columns.Add("Order Id", typeof(string));
+            dt.Columns.Add("Order Id", typeof(int));
             dt.Columns.Add("Order Status", typeof(string));
             dt.Columns.Add("Order Status Changed Date", typeof(DateTime));
             dt.Columns.Add("Expected Order Completion Changed Date", typeof(DateTime));
+            dt.Columns.Add("Estimated Order Completion Changed Date", typeof(DateTime));
             dt.Columns.Add("Total Cost", typeof(Double));
             var query = from o in context.Orders.AsEnumerable()
                         where o.ClientId == clientId
@@ -38,24 +39,14 @@ namespace Iron_helm_order_mgt.DAL
                             o.orderStatus,
                             o.orderStatusChangedDate,
                             o.expectedOrderDate,
+                            o.estimatedCompletionDate,
                             o.TotalOrderPrice
                             }, false);
-            //if (query != null && query.Count()!=0)
-            //{
-           if (query.Any()){
-                query.CopyToDataTable();
-            }
-            //}
+          // if (query.Count()>0){
+                query.AsEnumerable().GroupBy(row => row.Field<int>("Order Id")).Select(group => group.First()).CopyToDataTable();
+          //  }
             return dt;
         }
-
-        //public void cancelOrder(int orderId)
-        //{
-        //    Order order= context.Orders.Single(o => o.orderId == orderId);
-        //    order.orderStatus = Enum.GetName(typeof(OrderStatus), OrderStatus.CANCELLED);
-        //    order.orderStatusChangedDate = DateTime.Now;
-        //    context.SaveChanges();
-        //}
 
         public Order getOrderById(int orderId)
         {
@@ -63,21 +54,20 @@ namespace Iron_helm_order_mgt.DAL
             return order;
         }
 
-        //public void acceptOrder(int orderId)
-        //{
-        //    Order order = context.Orders.Single(o => o.orderId == orderId);
-        //    order.orderStatus = Enum.GetName(typeof(OrderStatus), OrderStatus.ACCEPTED);
-        //    order.orderStatusChangedDate = DateTime.Now;
-        //    context.SaveChanges();
-        //}
-
         public void setOrderStatus(int orderId,OrderStatus status)
         {
             Order order = context.Orders.Single(o => o.orderId == orderId);
             order.orderStatus = Enum.GetName(typeof(OrderStatus), status);
             order.orderStatusChangedDate = DateTime.Now;
+            try 
+            { 
             context.SaveChanges();
-        }
+             }
+            catch (Exception e)
+            {
+                Console.WriteLine("error " + e);
+            }
+}
 
         public int createOrder(String clientId,DateTime expectedDate,List<OrderLineItem> lines)
         {
@@ -99,17 +89,15 @@ namespace Iron_helm_order_mgt.DAL
             {
                 newOrder.OrderLineItems.Add(o);
             }
-            
-
-          // try
-          // {
+           try
+            {
                 context.Orders.Add(newOrder);
                 context.SaveChanges();
-          // }
-          //  catch (Exception e)
-          //  {
-          //      throw e;
-          //  }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("error " + e);
+            }
             return newId;
         }
 
@@ -119,7 +107,14 @@ namespace Iron_helm_order_mgt.DAL
             Order order = context.Orders.Single(o => o.orderId == orderId);
             order.estimatedCompletionDate= estimatedDate;
             order.TotalOrderPrice = cost;
-            context.SaveChanges();
+            try
+            {
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("error " + e);
+            }
         }
 
         public DataTable getOrders()
@@ -130,6 +125,7 @@ namespace Iron_helm_order_mgt.DAL
             dt.Columns.Add("Order Status", typeof(string));
             dt.Columns.Add("Order Status Changed Date", typeof(DateTime));
             dt.Columns.Add("Expected Order Completion Changed Date", typeof(DateTime));
+            dt.Columns.Add("Estimated Order Completion Changed Date", typeof(DateTime));
             dt.Columns.Add("Total Cost", typeof(Double));
             var query = from o in context.Orders.AsEnumerable()
                         orderby o.orderStatusChangedDate descending
@@ -139,15 +135,13 @@ namespace Iron_helm_order_mgt.DAL
                             o.orderStatus,
                             o.orderStatusChangedDate,
                             o.expectedOrderDate,
+                            o.estimatedCompletionDate,
                             o.TotalOrderPrice
                             }, false);
-            //if (query != null && query.Count()!=0)
+            //if (query!=null&&query.Any())
             //{
-            if (query.Any())
-            {
-                query.CopyToDataTable();
-            }
-            //}
+                query?.CopyToDataTable();
+          //  }
             return dt;
         }
     }

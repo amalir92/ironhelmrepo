@@ -35,6 +35,12 @@ namespace Iron_helm_order_mgt
                 new Customer {clientId="003C",clientAddress="no 9 durham",customerSource=CustomerSource.INDIVIDUAL}
             });
 
+            context.orderLineItems.AddRange(new[]
+           {
+                new OrderLineItem {orderLineItemId=1,productCode="001P",quantity=1,pricePerItem=0,OrderId=new Order {orderId=1,ClientId="001C",orderStatus="NEW",orderStatusChangedDate=DateTime.Now,expectedOrderDate=DateTime.Now.AddMonths(1),estimatedCompletionDate=DateTime.Now.AddMonths(1),TotalOrderPrice=0}
+            }
+            });
+
 
             context.SaveChanges();
         }
