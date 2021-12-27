@@ -8,9 +8,6 @@ namespace Iron_helm_order_mgt
 {
     public class CPerson : Customer
     {
-
-        //public virtual User userId { get; set; }
-
         public String personName { get; set; }
         public String bankName { get; set; }
 

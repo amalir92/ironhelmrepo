@@ -1,4 +1,6 @@
 ﻿using Iron_helm_order_mgt.Service;
+using ironhelmrepo.Presenters;
+using ironhelmrepo.Views;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,43 +14,62 @@ using System.Windows.Forms;
 
 namespace Iron_helm_order_mgt
 {
-    public partial class Create_Order_Form : Form
+    public partial class Create_Order_Form : Form,ICreateOrderView
     {
-        private ProductService productService;
-        private OrderService orderService;
-        private OrderLineItemService orderLineItemService;
-        DataTable dt = new DataTable();
-        private BindingSource bindingSource1 = new BindingSource();
         String clientId;
+        private CreateOrderPresenter presenter = null;
+        DataTable dt = new DataTable();
+
+        List<OrderLineItem> lines = new List<OrderLineItem>();
+
+        string ICreateOrderView.clientId
+        { 
+            get { return clientId; }
+            set { }
+        }
+
+        public DateTime expectedOrderCompletionDate 
+        { 
+            get { return dateTimePicker1.Value; }
+            set { dateTimePicker1.Value = expectedOrderCompletionDate; }
+        }
+        public List<OrderLineItem> orderLines
+        {
+            get
+            {
+                for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
+                {
+                    OrderLineItem item = new OrderLineItem();
+                    item.quantity = Convert.ToInt32(dataGridView1.Rows[i].Cells["Quantity"].Value);
+                    //ProductCatalog p = productService.getProductById();
+                    item.productCode = dataGridView1.Rows[i].Cells["Product Code"].Value.ToString();
+                    lines.Add(item);
+                }
+                return lines;
+            }
+            set { }
+        }
 
         public Create_Order_Form(String clientId)
         {
-            productService = new ProductService();
-            orderService = new OrderService();
             InitializeComponent();
             this.clientId = clientId;
+            presenter = new CreateOrderPresenter(this);
         }
 
         private void Create_Order_Form_Load(object sender, EventArgs e)
         {
-            load_products();
-
             dt.Columns.Add("Product Code");
             dt.Columns.Add("Quantity");
-
-
+            load_products();
         }
 
         private void load_products()
         {
-            DataTable da=productService.getAllProducts();
-            //da.Rows.Add("Select Product");
-            //set the combobox datasource 
+            DataTable da = presenter.getAllProducts();
             product_cmb.DataSource = da;
             product_cmb.DisplayMember = "productName";
             product_cmb.ValueMember = "productId";
-            //product_cmb.SelectedValue = "Select Product";
-
         }
 
         private void add_order_btn_Click(object sender, EventArgs e)
@@ -61,11 +82,8 @@ namespace Iron_helm_order_mgt
                 product_code = oDataRowView.Row["productId"] as string;
             }
                 int quantity = int.Parse(quantity_txt.Text);
-                //DateTime expectedDate = dateTimePicker1.Value;
-
                 dt.Rows.Add(product_code, quantity);
-                dataGridView1.DataSource = dt;
-            
+                dataGridView1.DataSource = dt;            
         }
 
         private void delete_order_btn_Click(object sender, EventArgs e)
@@ -78,30 +96,18 @@ namespace Iron_helm_order_mgt
 
         private void submit_order_btn_Click(object sender, EventArgs e)
         {
-            string StrQuery;
-            List<OrderLineItem> lines = new List<OrderLineItem>();
-            OrderStatus n = OrderStatus.NEW;
+
             DateTime expectedDate = dateTimePicker1.Value;
             if (dataGridView1.Rows.Count  == 0)
             {
                 MessageBox.Show("Add an Order to submit!");
             }
             else
-            {
-                
-                for (int i = 0; i < dataGridView1.Rows.Count-1; i++)
-                {
-                    OrderLineItem item = new OrderLineItem();
-                    item.quantity = Convert.ToInt32(dataGridView1.Rows[i].Cells["Quantity"].Value);
-                    //ProductCatalog p = productService.getProductById();
-                   
-                    item.productCode= dataGridView1.Rows[i].Cells["Product Code"].Value.ToString();
-                    lines.Add(item);
-                }
-                int orderId = orderService.createOrder(clientId, expectedDate,lines);
+            {              
+                int orderId =presenter.createOrder();
                 MessageBox.Show("Order Submitted Successfully");
                 this.Hide();
-              }
+             }
                     
         }
 

@@ -26,10 +26,10 @@ namespace Iron_helm_order_mgt.DAL
                             o.clientId,
                             o.customerSource
                             }, false);
-            //if (query != null && query.Count()!=0)
-            //{
-            query.CopyToDataTable();
-            //}
+          //  if (query != null && query.Any())
+          //  {
+            query?.CopyToDataTable();
+         //   }
             return dt;
         }
 

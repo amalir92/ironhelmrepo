@@ -34,6 +34,7 @@ namespace Iron_helm_order_mgt.Forms
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.start_btn = new System.Windows.Forms.Button();
             this.finish_btn = new System.Windows.Forms.Button();
+            this.order_txt = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // label1
@@ -48,7 +49,7 @@ namespace Iron_helm_order_mgt.Forms
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(52, 129);
+            this.label2.Location = new System.Drawing.Point(52, 102);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(77, 13);
             this.label2.TabIndex = 1;
@@ -56,7 +57,7 @@ namespace Iron_helm_order_mgt.Forms
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(55, 156);
+            this.progressBar1.Location = new System.Drawing.Point(54, 131);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(457, 23);
             this.progressBar1.TabIndex = 2;
@@ -73,7 +74,7 @@ namespace Iron_helm_order_mgt.Forms
             // 
             // finish_btn
             // 
-            this.finish_btn.Location = new System.Drawing.Point(55, 192);
+            this.finish_btn.Location = new System.Drawing.Point(54, 170);
             this.finish_btn.Name = "finish_btn";
             this.finish_btn.Size = new System.Drawing.Size(75, 23);
             this.finish_btn.TabIndex = 4;
@@ -81,11 +82,19 @@ namespace Iron_helm_order_mgt.Forms
             this.finish_btn.UseVisualStyleBackColor = true;
             this.finish_btn.Click += new System.EventHandler(this.finish_btn_Click);
             // 
+            // order_txt
+            // 
+            this.order_txt.Location = new System.Drawing.Point(156, 29);
+            this.order_txt.Name = "order_txt";
+            this.order_txt.Size = new System.Drawing.Size(100, 20);
+            this.order_txt.TabIndex = 5;
+            // 
             // Order_Progress_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(573, 227);
+            this.ClientSize = new System.Drawing.Size(568, 222);
+            this.Controls.Add(this.order_txt);
             this.Controls.Add(this.finish_btn);
             this.Controls.Add(this.start_btn);
             this.Controls.Add(this.progressBar1);
@@ -105,5 +114,6 @@ namespace Iron_helm_order_mgt.Forms
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Button start_btn;
         private System.Windows.Forms.Button finish_btn;
+        private System.Windows.Forms.TextBox order_txt;
     }
 }

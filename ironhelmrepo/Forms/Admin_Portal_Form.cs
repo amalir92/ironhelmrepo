@@ -1,5 +1,7 @@
 ﻿using Iron_helm_order_mgt.Forms;
 using Iron_helm_order_mgt.Service;
+using ironhelmrepo.Presenters;
+using ironhelmrepo.Views;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,13 +14,28 @@ using System.Windows.Forms;
 
 namespace Iron_helm_order_mgt
 {
-    public partial class Admin_Portal_Frm : Form
+    public partial class Admin_Portal_Frm : Form, IAdminPortalView
     {
         private OrderService orderService;
+        private AdminPortalPresenter presenter = null;
+
+        public int orderId
+        {
+            get { return Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["Order Id"].Value); }
+            set { }
+        }
+
+        public int clientId
+        {
+            get { return Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["Client Id"].Value); }
+            set { }
+        }
+
         public Admin_Portal_Frm()
         {
             this.orderService = new OrderService();
             InitializeComponent();
+            presenter = new AdminPortalPresenter(this);
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -36,11 +53,10 @@ namespace Iron_helm_order_mgt
 
         private void Admin_Portal_Frm_Load(object sender, EventArgs e)
         {
-            DataTable dt = orderService.getOrders();
-            dataGridView1.DataSource = dt;
+            DisplayData();
             dataGridView1.Columns.Add(new DataGridViewButtonColumn()
             {
-                Text = "View Client Details",
+                Text = "View Client Source",
                 //Tag = (Action<Order>)ClickHandler,
                 UseColumnTextForButtonValue = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.None
@@ -51,7 +67,7 @@ namespace Iron_helm_order_mgt
         {
             foreach (DataGridViewRow row in dataGridView1.SelectedRows)
             {
-                Order order = orderService.getOrderById(Convert.ToInt32(row.Cells[0].Value));
+                Order order = presenter.getOrderById();
                 if (order.orderStatus == "NEW")
                 {
                     Estimate_Order_Form estimateForm = new Estimate_Order_Form(order);
@@ -63,7 +79,7 @@ namespace Iron_helm_order_mgt
                     sceduleOrderForm.Show();
                 }
 
-                if (order.orderStatus == "SCHEDULED"|| order.orderStatus == "PROGRESSING")
+                if (order.orderStatus == "SCHEDULED" || order.orderStatus == "PROGRESSING")
                 {
                     Order_Progress_Form progressForm = new Order_Progress_Form(order);
                     progressForm.Show();
@@ -81,15 +97,21 @@ namespace Iron_helm_order_mgt
             }
         }
 
+        private void DisplayData()
+        {
+            DataTable dt = presenter.DisplayAllOrderData();
+            dataGridView1.DataSource = dt;
+
+        }
+
         private void refresh_btn_Click(object sender, EventArgs e)
         {
-            DataTable dt = orderService.getOrders();
-            BindingSource bs = new BindingSource();
-
-            bs.DataSource = dt;
-            dataGridView1.DataSource = bs;
+            dataGridView1.DataSource = null;
+            dataGridView1.Update();
+            dataGridView1.Refresh();
+            DisplayData();
             
-           
+
         }
     }
 }

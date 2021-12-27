@@ -15,6 +15,7 @@
     <Deterministic>true</Deterministic>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -27,7 +28,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -148,12 +148,6 @@
     <Compile Include="Forms\Order_Progress_Form.Designer.cs">
       <DependentUpon>Order_Progress_Form.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Process_Order_Form.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Process_Order_Form.Designer.cs">
-      <DependentUpon>Process_Order_Form.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\Schedule_Order_Form.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -162,6 +156,13 @@
     </Compile>
     <Compile Include="IronHelmDbContext.cs" />
     <Compile Include="IronHelmDBContextInitializer.cs" />
+    <Compile Include="Presenters\AdminPortalPresenter.cs" />
+    <Compile Include="Presenters\ClientPortalPresenter.cs" />
+    <Compile Include="Presenters\CreateOrderPresenter.cs" />
+    <Compile Include="Presenters\EstimateOrderPresenter.cs" />
+    <Compile Include="Presenters\LoginPresenter.cs" />
+    <Compile Include="Presenters\OrderLinesPresenter.cs" />
+    <Compile Include="Presenters\ProcessOrderPresenter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\CustomerService.cs" />
@@ -170,6 +171,13 @@
     <Compile Include="Service\OrderService.cs" />
     <Compile Include="Service\ProductService.cs" />
     <Compile Include="Service\UserService.cs" />
+    <Compile Include="Views\IAdminPortalView.cs" />
+    <Compile Include="Views\IClientPortalView.cs" />
+    <Compile Include="Views\ICreateOrderView.cs" />
+    <Compile Include="Views\IEstimateOrderView.cs" />
+    <Compile Include="Views\ILoginView.cs" />
+    <Compile Include="Views\IOrderLinesView.cs" />
+    <Compile Include="Views\IProcessOrderView.cs" />
     <EmbeddedResource Include="Forms\Admin_Portal_Form.resx">
       <DependentUpon>Admin_Portal_Form.cs</DependentUpon>
     </EmbeddedResource>
@@ -193,9 +201,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Order_Progress_Form.resx">
       <DependentUpon>Order_Progress_Form.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Process_Order_Form.resx">
-      <DependentUpon>Process_Order_Form.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Schedule_Order_Form.resx">
       <DependentUpon>Schedule_Order_Form.cs</DependentUpon>
@@ -224,15 +229,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="IronHelmDB.mdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="IronHelmDB_log.ldf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <DependentUpon>IronHelmDB.mdf</DependentUpon>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4.6 %28x86 and x64%29</ProductName>
@@ -244,6 +240,16 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="IronHelmDB.mdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="IronHelmDB_log.ldf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <DependentUpon>IronHelmDB.mdf</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -1,5 +1,7 @@
 ﻿using Iron_helm_order_mgt.Forms;
 using Iron_helm_order_mgt.Service;
+using ironhelmrepo.Presenters;
+using ironhelmrepo.Views;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,20 +15,34 @@ using System.Windows.Forms;
 
 namespace Iron_helm_order_mgt
 {
-    public partial class ClientPortal_Frm : Form
+    public partial class ClientPortal_Frm : Form, IClientPortalView
     {
         String username;
-        SqlDataAdapter dataAdapter;
-        SqlCommand cmd;
-        private OrderService orderService;
-        private OrderLineItemService orderLineItemService;
+        private ClientPortalPresenter presenter = null;
+
+        public string clientId
+        {
+            get { return username; }
+            set { }
+        }
+        public string orderStatus
+        {
+            get { return OrderDataGrid.SelectedRows[0].Cells["Order Status"].Value.ToString(); }
+            set { }
+        }
+        public int orderId
+        {
+            get { return Convert.ToInt32(OrderDataGrid.SelectedRows[0].Cells["Order Id"].Value); }
+            set { }
+        }
 
         public ClientPortal_Frm(String clientId)
         {
             InitializeComponent();
             this.username = clientId;
-            orderService = new OrderService();
-            orderLineItemService = new OrderLineItemService();
+
+            presenter = new ClientPortalPresenter(this);
+            
         }
 
 
@@ -39,70 +55,50 @@ namespace Iron_helm_order_mgt
         private void ClientPortal_Frm_Load(object sender, EventArgs e)
         {
 
-            DisplayData();
+            OrderDataGrid.DataSource = presenter.DisplayClientOrderData();
             OrderDataGrid.Columns.Add(new DataGridViewButtonColumn()
             {
                 Text = "View Order Lines",
-                //Tag = (Action<Order>)ClickHandler,
                 UseColumnTextForButtonValue = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.None
             });
 
         }
 
-        public void ClickHandler(Order order)
-        {
-            MessageBox.Show($"Hi {order.orderId}");
-        }
-        private void DisplayData()
-        {
-            DataTable dt=orderService.getCustomerByUseId(username);
-            
-            OrderDataGrid.DataSource = dt;
-           
-
-        }
 
         private void calcel_order_btn_Click(object sender, EventArgs e)
         {
-             foreach (DataGridViewRow row in OrderDataGrid.SelectedRows)
-             {
-                string status=orderService.cancelOrder(row.Cells["Order Status"].Value.ToString(),Convert.ToInt32(row.Cells["Order Id"].Value));
-                if (status.Equals("SUCCESS"))
-                {
-                    MessageBox.Show("Order cancelled succesfully");
-                    DisplayData();
-                }
-                else
-                {
-                    MessageBox.Show("Order cannot be cancelled at this stage");
-                }
-             }
-            
+            string status = presenter.CancelOrder();
+            if (status.Equals("SUCCESS"))
+            {
+                MessageBox.Show("Order cancelled succesfully");
+                OrderDataGrid.DataSource = presenter.DisplayClientOrderData();
+            }
+            else
+            {
+                MessageBox.Show("Order cannot be cancelled at this stage");
+            }
+
+
         }
 
         private void accept_order_btn_Click(object sender, EventArgs e)
         {
-            foreach (DataGridViewRow row in OrderDataGrid.SelectedRows)
+            string status = presenter.AcceptOrder();
+            if (status.Equals("SUCCESS"))
             {
-                    string status = orderService.acceptOrder(row.Cells["Order Status"].Value.ToString(), Convert.ToInt32(row.Cells["Order Id"].Value));
-                    if (status.Equals("SUCCESS"))
-                    {
-                        MessageBox.Show("Order accepted succesfully");
-                        DisplayData();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Order cannot be accepted at this stage");
-                    }
-                
+                MessageBox.Show("Order accepted succesfully");
+                OrderDataGrid.DataSource = presenter.DisplayClientOrderData();
             }
-            
+            else
+            {
+                MessageBox.Show("Order cannot be accepted at this stage");
+            }
         }
 
         private void refresh_btn_Click(object sender, EventArgs e)
         {
-            DisplayData();
+            OrderDataGrid.DataSource = presenter.DisplayClientOrderData();
         }
 
         private void OrderDataGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)

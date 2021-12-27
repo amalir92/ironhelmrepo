@@ -39,7 +39,7 @@ namespace Iron_helm_order_mgt
             // 
             // create_order_btn
             // 
-            this.create_order_btn.Location = new System.Drawing.Point(12, 25);
+            this.create_order_btn.Location = new System.Drawing.Point(12, 40);
             this.create_order_btn.Name = "create_order_btn";
             this.create_order_btn.Size = new System.Drawing.Size(111, 30);
             this.create_order_btn.TabIndex = 0;
@@ -78,7 +78,7 @@ namespace Iron_helm_order_mgt
             // 
             // refresh_btn
             // 
-            this.refresh_btn.Location = new System.Drawing.Point(129, 25);
+            this.refresh_btn.Location = new System.Drawing.Point(129, 40);
             this.refresh_btn.Name = "refresh_btn";
             this.refresh_btn.Size = new System.Drawing.Size(85, 30);
             this.refresh_btn.TabIndex = 5;

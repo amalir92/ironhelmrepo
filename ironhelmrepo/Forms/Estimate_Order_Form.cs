@@ -1,4 +1,6 @@
 ﻿using Iron_helm_order_mgt.Service;
+using ironhelmrepo.Presenters;
+using ironhelmrepo.Views;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,19 +11,39 @@ using System.Windows.Forms;
 
 namespace Iron_helm_order_mgt.Forms
 {
-    public partial class Estimate_Order_Form : Form
+    public partial class Estimate_Order_Form : Form,IEstimateOrderView
     {
-        private OrderLineItemService orderLinesService;
-        private OrderService orderService;
+        private EstimateOrderPresenter presenter = null;
         private Order order;
         DataTable dt;
+
+        public int orderId
+        {
+            get { return order.orderId; }
+            set { }
+        }
+        public string orderStatus
+        {
+            get { return order.orderStatus; }
+            set { }
+        }
+        public DateTime estimatedDate
+        {
+            get { return dateTimePicker1.Value; }
+            set { }
+        }
+        public double totalCost
+        { 
+            get { return Convert.ToDouble(totalCost_txt.Text); }
+            set { }
+        }
+
         public Estimate_Order_Form(Order order)
         {
             InitializeComponent();
-            orderLinesService = new OrderLineItemService();
-            orderService = new OrderService();
             this.order = order;
             dt = new DataTable();
+            presenter = new EstimateOrderPresenter(this);
         }
 
         private void Estimate_Order_Form_Load(object sender, EventArgs e)
@@ -38,7 +60,7 @@ namespace Iron_helm_order_mgt.Forms
 
         private void load_products()
         {
-            List<OrderLineItem> lines = orderLinesService.getOrderLinesById(order.orderId);
+            List<OrderLineItem> lines = presenter.getOrderLines();
             foreach(OrderLineItem l in lines)
             {
                 products_cmb.Items.Add(l.productCode + "-" + l.quantity);
@@ -89,8 +111,16 @@ namespace Iron_helm_order_mgt.Forms
         {
             DateTime estimatedDate = dateTimePicker1.Value;
             Double cost = Convert.ToDouble(totalCost_txt.Text);
-            orderService.updateOrder(order.orderId, estimatedDate, cost);
-            orderService.estimateOrder(order.orderStatus, order.orderId);
+            presenter.updateOrder();
+            string status = presenter.estimateOrder();
+            if (status.Equals("SUCCESS"))
+            {
+                MessageBox.Show("Order estimated succesfully");
+            }
+            else
+            {
+                MessageBox.Show("Order coud not be estimated");
+            }
             Hide();
         }
 

@@ -39,15 +39,19 @@ namespace Iron_helm_order_mgt.DAL
             newOrderLine.productCode = productId;
             newOrderLine.quantity = quantity;
 
-            //try
-            //{
-            context.orderLineItems.Add(newOrderLine);
-            context.SaveChanges();
-            
+            try
+            {
+                context.orderLineItems.Add(newOrderLine);
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error " + e);
+            }
 
-        }
+            }
 
-        public DataTable getOrderLinesByOrderId(int orderId)
+            public DataTable getOrderLinesByOrderId(int orderId)
         {
             DataTable dt = new DataTable();
             dt.Columns.Add("Product Code", typeof(string));
@@ -60,11 +64,16 @@ namespace Iron_helm_order_mgt.DAL
                             o.productCode,
                             o.quantity
                             }, false);
-            //if (query != null && query.Count()!=0)
-            //{
-            //if (query.Any())
+            try
+            {
+                //if(query != null && query.Any()) { 
                 query.CopyToDataTable();
-            //}
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error "+e);
+            }
+            // }
             return dt;
         }
 

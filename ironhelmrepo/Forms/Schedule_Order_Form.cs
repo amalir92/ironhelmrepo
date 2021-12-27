@@ -1,4 +1,6 @@
 ﻿using Iron_helm_order_mgt.Service;
+using ironhelmrepo.Presenters;
+using ironhelmrepo.Views;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,20 +13,27 @@ using System.Windows.Forms;
 
 namespace Iron_helm_order_mgt.Forms
 {
-    public partial class Schedule_Order_Form : Form
+    public partial class Schedule_Order_Form : Form,IProcessOrderView
     {
-        private OrderService orderService;
         private Order order;
+        private ProcessOrderPresenter presenter = null;
+
+        Order IProcessOrderView.order
+        {
+            get { return order; }
+            set { }
+        }
+
         public Schedule_Order_Form(Order order)
         {
             InitializeComponent();
-            this.orderService = new OrderService();
             this.order = order;
+            presenter = new ProcessOrderPresenter(this);
         }
 
         private void ok_btn_Click(object sender, EventArgs e)
         {
-            string status = orderService.scheduleOrder(order.orderStatus, order.orderId);
+            string status = presenter.scheduleOrder();
             if (status.Equals("SUCCESS"))
             {
                 MessageBox.Show("Order scheduled succesfully");
