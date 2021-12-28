@@ -19,7 +19,7 @@ namespace Iron_helm_order_mgt.Forms
 
         string ICustomerDetailsView.clientId
         {
-            get { return clientId; }
+            get { return this.clientId; }
             set { }
         }
         public Customer_Details_Form(string clientId)
