@@ -17,6 +17,7 @@ namespace ironhelmrepo.Presenters
         public ClientDetailsPresenter(ICustomerDetailsView view)
         {
             this.view = view;
+            customerDAL = new CustomerDAL();
         }
 
         public DataTable getCustomerDetailsById()
