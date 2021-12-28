@@ -60,8 +60,8 @@ namespace Iron_helm_order_mgt.DAL
             order.orderStatus = Enum.GetName(typeof(OrderStatus), status);
             order.orderStatusChangedDate = DateTime.Now;
             try 
-            { 
-            context.SaveChanges();
+            {
+                context.SaveChangesAsync();
              }
             catch (Exception e)
             {
@@ -77,18 +77,7 @@ namespace Iron_helm_order_mgt.DAL
                 var maxId = this.context.Orders.Max(table => table.orderId);
                 newId = maxId + 1;
             }
-            Order newOrder = new Order();
-            newOrder.orderId = newId;
-            newOrder.ClientId = clientId;
-            newOrder.orderStatusChangedDate = DateTime.Now;
-            newOrder.orderStatus = "NEW";
-            newOrder.estimatedCompletionDate = DateTime.Now;
-            newOrder.expectedOrderDate = expectedDate;
-            newOrder.OrderLineItems = new List<OrderLineItem>();
-            foreach (OrderLineItem o in lines)
-            {
-                newOrder.OrderLineItems.Add(o);
-            }
+            Order newOrder = new Order(newId, lines, clientId, "NEW", DateTime.Now, DateTime.Now, expectedDate, 0,0,0);
            try
             {
                 context.Orders.Add(newOrder);
@@ -101,12 +90,12 @@ namespace Iron_helm_order_mgt.DAL
             return newId;
         }
 
-        public void updateOrder(int orderId, DateTime estimatedDate,Double cost)
+        public void updateOrder(Order order_)
         {
 
-            Order order = context.Orders.Single(o => o.orderId == orderId);
-            order.estimatedCompletionDate= estimatedDate;
-            order.TotalOrderPrice = cost;
+            Order order = context.Orders.Single(o => o.orderId == order_.orderId);
+            order.estimatedCompletionDate = order_.estimatedCompletionDate;
+            order.TotalOrderPrice = order_.TotalOrderPrice;       
             try
             {
                 context.SaveChanges();

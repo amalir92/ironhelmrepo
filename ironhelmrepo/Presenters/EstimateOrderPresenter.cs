@@ -28,20 +28,36 @@ namespace ironhelmrepo.Presenters
 
         public string estimateOrder()
         {
-            if (view.orderStatus != null && view.orderStatus.Equals(Enum.GetName(typeof(OrderStatus), OrderStatus.NEW)))
-            {
-                orderDAL.setOrderStatus(view.orderId, OrderStatus.ESTIMATED);
-                return "SUCCESS";
-            }
-            else
-            {
-                return "ERROR";
-            }
+            Order order = orderDAL.getOrderById(view.orderId);
+            return order.validateOrderStatusChange(OrderStatus.ESTIMATED);
         }
 
-        public void updateOrder() 
+        public void updateOrderLines() 
         {
-             orderDAL.updateOrder(view.orderId,view.estimatedDate,view.totalCost);
+             List<OrderLineItem> orderlines = getOrderLines();
+             foreach(OrderLineItem line in orderlines)
+            {
+                if (line.productCode.Equals(view.productCode))
+                {
+                    line.labourHoursPerItem = view.hours;
+                    line.costPerHour = view.costPerHour;
+                    line.calculateCostPerItemProduction();
+                    orderLineItemDAL.updateOrderLineItem(line);
+                }
+            }
+             
+        }
+
+        public void updateOrder()
+        {
+            Order order = orderDAL.getOrderById(view.orderId);
+            order.packageCost = view.packageCost;
+            order.deliveryCost = view.deliveryCost;
+            List<OrderLineItem> orderlines = getOrderLines();
+            
+            order.TotalOrderPrice= order.calculateTotalCost(orderlines);
+            order.updateOrder(order);
+            orderDAL.updateOrder(order);
         }
 
     }

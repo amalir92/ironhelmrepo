@@ -22,7 +22,7 @@ namespace Iron_helm_order_mgt
         public string clientId
         {
             get { return username; }
-            set { }
+            set { username = value; }
         }
         public string orderStatus
         {

@@ -31,42 +31,22 @@ namespace ironhelmrepo.Presenters
 
         public string scheduleOrder()
         {
-
-            if (view.order.orderStatus != null && view.order.orderStatus.Equals(Enum.GetName(typeof(OrderStatus), OrderStatus.ACCEPTED)))
-            {
-                orderDAL.setOrderStatus(view.order.orderId, OrderStatus.SCHEDULED);
-                return "SUCCESS";
-            }
-            else
-            {
-                return "ERROR";
-            }
+            Order order = orderDAL.getOrderById(view.order.orderId);
+            return order.validateOrderStatusChange(OrderStatus.SCHEDULED);
         }
 
         public string progressOrder()
         {
-            if (view.order.orderStatus != null && view.order.orderStatus.Equals(Enum.GetName(typeof(OrderStatus), OrderStatus.SCHEDULED)))
-            {
-                orderDAL.setOrderStatus(view.order.orderId, OrderStatus.PROGRESSING);
-                return "SUCCESS";
-            }
-            else
-            {
-                return "ERROR";
-            }
+            Order order = orderDAL.getOrderById(view.order.orderId);
+            return order.validateOrderStatusChange(OrderStatus.PROGRESSING);
         }
+        
 
         public string completeOrder()
         {
-            if (view.order.orderStatus != null && view.order.orderStatus.Equals(Enum.GetName(typeof(OrderStatus), OrderStatus.PROGRESSING)) || view.order.orderStatus.Equals(Enum.GetName(typeof(OrderStatus), OrderStatus.SCHEDULED)))
-            {
-                orderDAL.setOrderStatus(view.order.orderId, OrderStatus.COMPLETED);
-                return "SUCCESS";
-            }
-            else
-            {
-                return "ERROR";
-            }
+            Order order = orderDAL.getOrderById(view.order.orderId);
+            return order.validateOrderStatusChange(OrderStatus.COMPLETED);
+            
         }
 
         public Customer getCustomerById()

@@ -11,6 +11,7 @@ namespace Iron_helm_order_mgt
 {
    public  class Customer
     {
+
         [Key]
         public String clientId { get; set; }
 
@@ -21,19 +22,27 @@ namespace Iron_helm_order_mgt
 
         public string remarks { get; set; }
 
-        public void create_order()
+        public Customer()
         {
 
         }
-
-        public void cancel_order()
+        public Customer (string clientId,string clientAddress,CustomerSource customerSource,string clientPhoneNumber)
         {
-
+            this.clientId = clientId;
+            this.clientAddress = clientAddress;
+            this.customerSource = customerSource;
+            this.clientPhoneNumber = clientPhoneNumber;
         }
 
-        public void accept_or_decline_order()
+        public Customer addNewCustomer(string clientId, string clientAddress, CustomerSource customerSource, string clientPhoneNumber)
         {
+            return new Customer(clientId, clientAddress, customerSource, clientPhoneNumber);
+        }
 
+        public void updateCustomer(Customer customer)
+        {
+            this.clientAddress = customer.clientAddress;
+            this.clientPhoneNumber = customer.clientPhoneNumber;
         }
     }
 }

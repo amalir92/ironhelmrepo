@@ -9,6 +9,10 @@ namespace Iron_helm_order_mgt
 {
     public class ProductCatalog
     {
+        public ProductCatalog()
+        {
+
+        }
         [Key]
         public String productId { get; set; }
 
@@ -16,6 +20,18 @@ namespace Iron_helm_order_mgt
         public String productName { get; set; }
 
         public String productDescription { get; set; }
+
+        public ProductCatalog(string productId,string productName, string productDescription)
+        {
+            this.productId = productId;
+            this.productName = productName;
+            this.productDescription = productDescription;
+        }
+
+        public ProductCatalog createNewProduct(string productId,string productName,string productDescription)
+        {
+            return new ProductCatalog(productId, productName, productDescription);
+        }
 
     }
 }

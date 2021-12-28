@@ -25,7 +25,7 @@ namespace Iron_helm_order_mgt.DAL
             conn = new SqlConnection(ironhelmrepo.Properties.Settings.Default.dbconnection);
         }
 
-        public void create_order_line(int orderNo, String productId, int quantity)
+        public void create_order_line(int orderNo, String productId, int quantity, int labourHours, double costPerHour)
         {
             var newId = 1;
             if (this.context.orderLineItems.Count() != 0)
@@ -33,11 +33,7 @@ namespace Iron_helm_order_mgt.DAL
                 var maxId = this.context.orderLineItems.Max(table => table.orderLineItemId);
                 newId = maxId + 1;
             }
-            OrderLineItem newOrderLine = new OrderLineItem();
-            newOrderLine.OrderId = orderDal.getOrderById(orderNo);
-            newOrderLine.orderLineItemId = newId;
-            newOrderLine.productCode = productId;
-            newOrderLine.quantity = quantity;
+            OrderLineItem newOrderLine = new OrderLineItem(newId, orderDal.getOrderById(orderNo),productId,quantity,labourHours,costPerHour);
 
             try
             {
@@ -81,6 +77,24 @@ namespace Iron_helm_order_mgt.DAL
         {
             List<OrderLineItem> orderLine = context.orderLineItems.Where(o => o.OrderId.orderId == orderId).ToList();
             return orderLine;
+        }
+
+        public void updateOrderLineItem(OrderLineItem line)
+        {
+
+            OrderLineItem orderLine = context.orderLineItems.Single(o => o.OrderId.orderId == line.OrderId.orderId && o.orderLineItemId==line.orderLineItemId);
+            orderLine.labourHoursPerItem = line.labourHoursPerItem;
+            orderLine.costPerHour = line.costPerHour;
+            orderLine.costperLineProduction = line.costperLineProduction;
+            
+            try
+            {
+                context.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("error " + e);
+            }
         }
 
     }

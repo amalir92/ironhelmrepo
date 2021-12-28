@@ -10,6 +10,17 @@ namespace Iron_helm_order_mgt
 {
     public class User
     {
+        public User()
+        {
+
+        }
+        public User(string userId, string userType, string password)
+        {
+            this.userId = userId;
+            this.userType = userType;
+            this.password = password;
+        }
+
         [Key]
         public String userId { get; set; }
 

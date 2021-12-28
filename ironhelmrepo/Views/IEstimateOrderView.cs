@@ -19,5 +19,13 @@ namespace ironhelmrepo.Views
 
         double deliveryCost { get; set; }
         double totalCost { get; set; }
+
+        int hours { get; set; }
+
+        double costPerHour { get; set; }
+
+        string productCode { get; set; }
+
+        int quantity { get; set; }
     }
 }

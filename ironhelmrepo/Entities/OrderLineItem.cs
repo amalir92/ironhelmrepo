@@ -9,7 +9,26 @@ using System.Threading.Tasks;
 namespace Iron_helm_order_mgt
 {
     public class OrderLineItem
-    {
+    { 
+        public OrderLineItem()
+        {
+
+        }
+        public OrderLineItem(int orderLineItemId, Order orderId, string productCode, int quantity, int labourHoursPerItem, double costPerHour)
+        {
+            this.orderLineItemId = orderLineItemId;
+            OrderId = orderId;
+            this.productCode = productCode;
+            this.quantity = quantity;
+            this.labourHoursPerItem = labourHoursPerItem;
+            this.costPerHour = costPerHour;
+        }
+        public OrderLineItem(string productCode, int quantity)
+        {
+            this.productCode = productCode;
+            this.quantity = quantity;
+        }
+
         [Key]
         public int orderLineItemId { get; set; }
 
@@ -21,6 +40,18 @@ namespace Iron_helm_order_mgt
 
         public int quantity { get; set; }
 
-        public double pricePerItem { get; set; }
+        public int labourHoursPerItem { get; set; }
+
+        public double costPerHour { get; set; }
+
+        public double costperLineProduction { get; set; }
+
+        public double calculateCostPerItemProduction()
+        {
+           
+            this.costperLineProduction= quantity * labourHoursPerItem * costPerHour;
+            return costperLineProduction;
+        }
+
     }
 }

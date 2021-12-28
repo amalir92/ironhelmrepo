@@ -21,7 +21,7 @@ namespace Iron_helm_order_mgt
         public int orderId
         {
             get { return Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["Order Id"].Value); }
-            set { }
+            set {}
         }
 
         public int clientId

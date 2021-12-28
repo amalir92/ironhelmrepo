@@ -31,27 +31,13 @@ namespace ironhelmrepo.Presenters
 
         public string AcceptOrder()
         {
-            if (portalview.orderStatus != null && portalview.orderStatus.Equals(Enum.GetName(typeof(OrderStatus), OrderStatus.ESTIMATED)))
-            {
-                orderDAL.setOrderStatus(portalview.orderId, OrderStatus.ACCEPTED);
-                return "SUCCESS";
-            }
-            else
-            {
-                return "ERROR";
-            }
+            Order order = orderDAL.getOrderById(portalview.orderId);
+            return order.validateOrderStatusChange(OrderStatus.ACCEPTED);
         }
-            public string CancelOrder()
-            {
-            if (portalview.orderStatus.Equals(Enum.GetName(typeof(OrderStatus), OrderStatus.NEW)))
-            {
-                orderDAL.setOrderStatus(portalview.orderId, OrderStatus.CANCELLED);
-                return "SUCCESS";
-            }
-            else
-            {
-                return "ERROR";
-            }
+        public string CancelOrder()
+        {
+            Order order = orderDAL.getOrderById(portalview.orderId);
+            return order.validateOrderStatusChange(OrderStatus.CANCELLED);
         }
 
     }

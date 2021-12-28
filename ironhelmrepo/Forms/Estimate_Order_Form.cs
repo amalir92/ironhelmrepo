@@ -48,6 +48,28 @@ namespace Iron_helm_order_mgt.Forms
             set { deliveryCost_txt.Text = value.ToString(); }
         }
 
+        public int hours
+        {
+            get { return Convert.ToInt32(hours_txt.Text); }
+            set { hours_txt.Text = value.ToString(); }
+        }
+
+        public double costPerHour
+        {
+            get { return Convert.ToDouble(cost_txt.Text); }
+            set { cost_txt.Text = value.ToString(); }
+        }
+
+        public string productCode
+        {
+            get { return products_cmb.SelectedItem.ToString().Split('-')[0]; }
+            set { }
+        }
+        public int quantity 
+        {
+            get { return Convert.ToInt32(products_cmb.SelectedItem.ToString().Split('-')[1]); }
+            set { }
+        }
         public Estimate_Order_Form(Order order)
         {
             InitializeComponent();
@@ -71,12 +93,11 @@ namespace Iron_helm_order_mgt.Forms
         private void load_products()
         {
             List<OrderLineItem> lines = presenter.getOrderLines();
-            foreach(OrderLineItem l in lines)
+            foreach (OrderLineItem l in lines)
             {
                 products_cmb.Items.Add(l.productCode + "-" + l.quantity);
-               
-            }
-            
+
+            }          
 
         }
 
@@ -89,6 +110,7 @@ namespace Iron_helm_order_mgt.Forms
                     Convert.ToInt32(hours_txt.Text),
                     Convert.ToDouble(cost_txt.Text));
                 dataGridView1.DataSource = dt;
+                presenter.updateOrderLines();
                 products_cmb.SelectedIndex = -1;
                 hours_txt.Text = "";
                 cost_txt.Text = "";
