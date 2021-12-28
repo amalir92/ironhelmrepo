@@ -1,5 +1,4 @@
 ﻿using Iron_helm_order_mgt.Controls;
-using Iron_helm_order_mgt.Service;
 using ironhelmrepo.Presenters;
 using ironhelmrepo.Views;
 using System;
@@ -29,11 +28,6 @@ namespace Iron_helm_order_mgt
             password.PasswordChar = '*';
             presenter = new LoginPresenter(this);
             getStateInfo();
-        }
-
-        private void initalize_dbTables()
-        {
-            DatabaseInitializer.databaseInitialize();
         }
 
         private void Login_Click(object sender, EventArgs e)

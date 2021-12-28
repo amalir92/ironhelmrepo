@@ -1,5 +1,4 @@
 ﻿using Iron_helm_order_mgt.Forms;
-using Iron_helm_order_mgt.Service;
 using ironhelmrepo.Presenters;
 using ironhelmrepo.Views;
 using System;
@@ -16,7 +15,7 @@ namespace Iron_helm_order_mgt
 {
     public partial class Admin_Portal_Frm : Form, IAdminPortalView
     {
-        private OrderService orderService;
+
         private AdminPortalPresenter presenter = null;
 
         public int orderId
@@ -33,7 +32,6 @@ namespace Iron_helm_order_mgt
 
         public Admin_Portal_Frm()
         {
-            this.orderService = new OrderService();
             InitializeComponent();
             presenter = new AdminPortalPresenter(this);
         }

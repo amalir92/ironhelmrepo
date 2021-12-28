@@ -2,7 +2,7 @@
 using Iron_helm_order_mgt;
 using Iron_helm_order_mgt.Entities;
 using Iron_helm_order_mgt.Factory;
-using Iron_helm_order_mgt.Service;
+using Iron_helm_order_mgt.DAL;
 using ironhelmrepo.Views;
 using System;
 using System.Collections.Generic;
@@ -15,43 +15,68 @@ namespace ironhelmrepo.Presenters
     public class ProcessOrderPresenter
     {
         private readonly IProcessOrderView view;
-        private OrderService orderService;
-        private CustomerService customerService;
-        private OrderLineItemService orderLineItemService;
-        private ProductService productService;
+        private OrderDAL orderDAL;
+        private CustomerDAL customerDAL;
+        private OrderLineItemDAL orderLineItemDAL;
+        private ProductCatalogDAL productCatalogDAL;
 
         public ProcessOrderPresenter(IProcessOrderView view)
         {
             this.view = view;
-            this.orderService = new OrderService();
-            this.customerService = new CustomerService();
-            this.orderLineItemService = new OrderLineItemService();
-            this.productService = new ProductService();
+            this.orderDAL = new OrderDAL();
+            this.customerDAL = new CustomerDAL();
+            this.orderLineItemDAL = new OrderLineItemDAL();
+            this.productCatalogDAL = new ProductCatalogDAL();
         }
 
         public string scheduleOrder()
         {
-            return orderService.scheduleOrder(view.order.orderStatus, view.order.orderId);
+
+            if (view.order.orderStatus != null && view.order.orderStatus.Equals(Enum.GetName(typeof(OrderStatus), OrderStatus.ACCEPTED)))
+            {
+                orderDAL.setOrderStatus(view.order.orderId, OrderStatus.SCHEDULED);
+                return "SUCCESS";
+            }
+            else
+            {
+                return "ERROR";
+            }
         }
 
         public string progressOrder()
         {
-            return orderService.progressOrder(view.order.orderStatus, view.order.orderId);
+            if (view.order.orderStatus != null && view.order.orderStatus.Equals(Enum.GetName(typeof(OrderStatus), OrderStatus.SCHEDULED)))
+            {
+                orderDAL.setOrderStatus(view.order.orderId, OrderStatus.PROGRESSING);
+                return "SUCCESS";
+            }
+            else
+            {
+                return "ERROR";
+            }
         }
 
         public string completeOrder()
         {
-            return orderService.completeOrder(view.order.orderStatus, view.order.orderId);
+            if (view.order.orderStatus != null && view.order.orderStatus.Equals(Enum.GetName(typeof(OrderStatus), OrderStatus.PROGRESSING)) || view.order.orderStatus.Equals(Enum.GetName(typeof(OrderStatus), OrderStatus.SCHEDULED)))
+            {
+                orderDAL.setOrderStatus(view.order.orderId, OrderStatus.COMPLETED);
+                return "SUCCESS";
+            }
+            else
+            {
+                return "ERROR";
+            }
         }
 
         public Customer getCustomerById()
         {
-            return customerService.getCustomerById(view.order.ClientId);
+            return customerDAL.getCustomerById(view.order.ClientId);
         }
 
         public List<OrderLineItem> getOrderLinesByOrderId()
         {
-            return orderLineItemService.getOrderLinesById(view.order.orderId);
+            return orderLineItemDAL.getOrderLinesById(view.order.orderId);
         }
 
         public string initiateProduction() 
@@ -61,7 +86,7 @@ namespace ironhelmrepo.Presenters
             List<ProductCatalog> products = new List<ProductCatalog>();
             foreach (OrderLineItem l in lines)
             {
-                products.Add(productService.getProductById(l.productCode));
+                products.Add(productCatalogDAL.getProductById(l.productCode));
             }
 
             string customerSource = Enum.GetName(typeof(CustomerSource), customer.customerSource);
