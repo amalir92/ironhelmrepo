@@ -1,4 +1,5 @@
-﻿using Iron_helm_order_mgt.Service;
+﻿using ironhelmrepo.Presenters;
+using ironhelmrepo.Views;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,15 +12,21 @@ using System.Windows.Forms;
 
 namespace Iron_helm_order_mgt.Forms
 {
-    public partial class Customer_Details_Form : Form
+    public partial class Customer_Details_Form : Form, ICustomerDetailsView
     {
         private String clientId;
-        private CustomerService customerService;
+        private ClientDetailsPresenter presenter = null;
+
+        string ICustomerDetailsView.clientId
+        {
+            get { return clientId; }
+            set { }
+        }
         public Customer_Details_Form(string clientId)
         {
             InitializeComponent();
             this.clientId = clientId;
-            this.customerService = new CustomerService();
+            presenter = new ClientDetailsPresenter(this);
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -29,7 +36,7 @@ namespace Iron_helm_order_mgt.Forms
 
         private void Customer_Details_Form_Load(object sender, EventArgs e)
         {
-            DataTable dt = customerService.getCustomerDetailsById(clientId);
+            DataTable dt = presenter.getCustomerDetailsById();
             dataGridView1.DataSource = dt;
         }
     }

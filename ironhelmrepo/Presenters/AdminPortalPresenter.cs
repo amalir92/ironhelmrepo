@@ -1,5 +1,5 @@
 ﻿using Iron_helm_order_mgt;
-using Iron_helm_order_mgt.Service;
+using Iron_helm_order_mgt.DAL;
 using ironhelmrepo.Views;
 using System;
 using System.Collections.Generic;
@@ -13,21 +13,21 @@ namespace ironhelmrepo.Presenters
     public class AdminPortalPresenter
     {
         private readonly IAdminPortalView view;
-        private OrderService orderService;
+        private OrderDAL orderDAL;
 
         public AdminPortalPresenter(IAdminPortalView portalview)
         {
             this.view = portalview;
-            orderService = new OrderService();
+            orderDAL = new OrderDAL();
         }
         public DataTable DisplayAllOrderData()
         {
-            DataTable dt = orderService.getOrders();
+            DataTable dt = orderDAL.getOrders();
             return dt;
         }
         public Order getOrderById()
         {
-           return orderService.getOrderById(view.orderId);
+           return orderDAL.getOrderById(view.orderId);
         }
     }
 }

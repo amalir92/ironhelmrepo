@@ -1,5 +1,5 @@
 ﻿using Iron_helm_order_mgt;
-using Iron_helm_order_mgt.Service;
+using Iron_helm_order_mgt.DAL;
 using ironhelmrepo.Views;
 using System;
 using System.Collections.Generic;
@@ -12,34 +12,37 @@ namespace ironhelmrepo.Presenters
     public class EstimateOrderPresenter
     {
         private readonly IEstimateOrderView view;
-        private OrderService orderService;
-        private OrderLineItemService orderLineItemService;
+        private OrderDAL orderDAL;
+        private OrderLineItemDAL orderLineItemDAL;
 
         public EstimateOrderPresenter(IEstimateOrderView view)
         {
             this.view = view;
-            orderService = new OrderService();
-            orderLineItemService = new OrderLineItemService();
+            orderDAL = new OrderDAL();
+            orderLineItemDAL = new OrderLineItemDAL();
         }
         public List<OrderLineItem> getOrderLines()
         {
-            return orderLineItemService.getOrderLinesById(view.orderId);
+            return orderLineItemDAL.getOrderLinesById(view.orderId);
         }
 
         public string estimateOrder()
         {
-            return orderService.estimateOrder(view.orderStatus, view.orderId);
+            if (view.orderStatus != null && view.orderStatus.Equals(Enum.GetName(typeof(OrderStatus), OrderStatus.NEW)))
+            {
+                orderDAL.setOrderStatus(view.orderId, OrderStatus.ESTIMATED);
+                return "SUCCESS";
+            }
+            else
+            {
+                return "ERROR";
+            }
         }
 
         public void updateOrder() 
         {
-             orderService.updateOrder(view.orderId,view.estimatedDate,view.totalCost);
+             orderDAL.updateOrder(view.orderId,view.estimatedDate,view.totalCost);
         }
 
-        public double calculateTotalCost()
-        {
-            double tcost = 0;
-            return tcost;
-        }
     }
 }
