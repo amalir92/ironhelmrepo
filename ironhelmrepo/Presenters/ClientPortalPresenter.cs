@@ -13,20 +13,21 @@ namespace ironhelmrepo.Presenters
     public class ClientPortalPresenter
     {
         private readonly IClientPortalView portalview;
+        private Order order;
         private OrderDAL orderDAL;
         private OrderLineItemDAL orderLineItemDAL;
 
         public ClientPortalPresenter(IClientPortalView portalview)
         {
             this.portalview = portalview;
+            order = new Order();
             orderDAL = new OrderDAL();
             orderLineItemDAL = new OrderLineItemDAL();
 
         }
         public DataTable DisplayClientOrderData()
         {
-            DataTable dt = orderDAL.getCustomerById(portalview.clientId);
-            return dt;
+            return order.getCustomerOrdersById(portalview.clientId);
         }
 
         public string AcceptOrder()

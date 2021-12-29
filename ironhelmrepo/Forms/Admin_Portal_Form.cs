@@ -1,4 +1,5 @@
-﻿using Iron_helm_order_mgt.Forms;
+﻿using Iron_helm_order_mgt.Controls;
+using Iron_helm_order_mgt.Forms;
 using ironhelmrepo.Presenters;
 using ironhelmrepo.Views;
 using System;
@@ -17,16 +18,23 @@ namespace Iron_helm_order_mgt
     {
 
         private AdminPortalPresenter presenter = null;
+        private ApplicationState state = null;
 
         public int orderId
         {
             get { return Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["Order Id"].Value); }
-            set {}
+            set { }
         }
 
         public int clientId
         {
             get { return Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["Client Id"].Value); }
+            set { }
+        }
+
+        public string orderStatus
+        {
+            get { return dataGridView1.SelectedRows[0].Cells["Order Status"].Value.ToString(); }
             set { }
         }
 
@@ -66,28 +74,29 @@ namespace Iron_helm_order_mgt
             foreach (DataGridViewRow row in dataGridView1.SelectedRows)
             {
                 Order order = presenter.getOrderById();
-                if (order.orderStatus == "NEW")
+                if (orderStatus == "NEW")
                 {
+                    
                     Estimate_Order_Form estimateForm = new Estimate_Order_Form(order);
                     estimateForm.Show();
                 }
-                if (order.orderStatus == "ACCEPTED")
+                if (orderStatus == "ACCEPTED")
                 {
                     Schedule_Order_Form sceduleOrderForm = new Schedule_Order_Form(order);
                     sceduleOrderForm.Show();
                 }
 
-                if (order.orderStatus == "SCHEDULED" || order.orderStatus == "PROGRESSING")
+                if (orderStatus == "SCHEDULED" || orderStatus == "PROGRESSING")
                 {
                     Order_Progress_Form progressForm = new Order_Progress_Form(order);
                     progressForm.Show();
                 }
 
-                if (order.orderStatus == "CANCELLED")
+                if (orderStatus == "CANCELLED")
                 {
                     MessageBox.Show("Cannot process a Cancelled Order!");
                 }
-                if (order.orderStatus == "ESTIMATED")
+                if (orderStatus == "ESTIMATED")
                 {
                     MessageBox.Show("Order needs to be accepted by Customer!");
                 }
@@ -99,16 +108,27 @@ namespace Iron_helm_order_mgt
         {
             DataTable dt = presenter.DisplayAllOrderData();
             dataGridView1.DataSource = dt;
+            
 
         }
 
         private void refresh_btn_Click(object sender, EventArgs e)
         {
-            dataGridView1.DataSource = null;
-            dataGridView1.Update();
-            dataGridView1.Refresh();
+            //dataGridView1.DataSource = null;
+            //dataGridView1.Update();
+            //dataGridView1.Refresh();
             DisplayData();
-            
+            this.state = ApplicationState.getState();
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+            {
+
+                if (state.orderStatuses.ContainsKey(Convert.ToInt32(row.Cells["Order Id"].Value)))
+                {
+                    row.Cells["Order Status"].Value = state.orderStatuses[Convert.ToInt32(row.Cells["Order Id"].Value)];
+                }
+
+            }
+
 
         }
     }

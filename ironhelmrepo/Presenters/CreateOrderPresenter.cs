@@ -1,4 +1,5 @@
-﻿using Iron_helm_order_mgt.DAL;
+﻿using Iron_helm_order_mgt;
+using Iron_helm_order_mgt.DAL;
 using ironhelmrepo.Views;
 using System;
 using System.Collections.Generic;
@@ -12,26 +13,26 @@ namespace ironhelmrepo.Presenters
     public class CreateOrderPresenter
     {
         private readonly ICreateOrderView view;
-        private OrderDAL orderDAL;
-        private OrderLineItemDAL orderLineItemDAL;
-        private ProductCatalogDAL productCatalogDAL;
+        private Order order;
+        private ProductCatalog productCatalog;
 
         public CreateOrderPresenter(ICreateOrderView view)
         {
             this.view = view;
-            orderDAL = new OrderDAL();
-            orderLineItemDAL = new OrderLineItemDAL();
-            productCatalogDAL = new ProductCatalogDAL();
+            productCatalog = new ProductCatalog();
         }
 
         public DataTable getAllProducts()
         {
-            return productCatalogDAL.getAllPoducts(); ;
+           return productCatalog.getAllProducts();
         }
 
         public int createOrder()
         {
-            return orderDAL.createOrder(view.clientId, view.expectedOrderCompletionDate, view.orderLines);
+            order = new Order(view.orderLines, view.clientId, view.expectedOrderCompletionDate);
+            return order.createOrder();
+             
+
         }
     }
 }

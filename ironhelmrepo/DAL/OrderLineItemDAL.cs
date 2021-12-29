@@ -10,9 +10,6 @@ namespace Iron_helm_order_mgt.DAL
 {
     public class OrderLineItemDAL
     {
-        private SqlConnection conn;
-        private SqlDataAdapter sda;
-        private SqlCommand cmd;
         IronHelmDbContext context;
         OrderDAL orderDal;
         ProductCatalogDAL productCatalogDAL;
@@ -22,10 +19,10 @@ namespace Iron_helm_order_mgt.DAL
             orderDal = new OrderDAL();
             productCatalogDAL = new ProductCatalogDAL();
             this.context = new IronHelmDbContext();
-            conn = new SqlConnection(ironhelmrepo.Properties.Settings.Default.dbconnection);
+            
         }
 
-        public void create_order_line(int orderNo, String productId, int quantity, int labourHours, double costPerHour)
+        public void createOrderLine(int orderNo, String productId, int quantity, int labourHours, double costPerHour)
         {
             var newId = 1;
             if (this.context.orderLineItems.Count() != 0)

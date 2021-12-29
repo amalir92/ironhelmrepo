@@ -11,15 +11,12 @@ namespace Iron_helm_order_mgt.DAL
 {
     public class OrderDAL
     {
-        private SqlConnection conn;
-        private SqlDataAdapter sda;
-        private SqlCommand cmd;
         IronHelmDbContext context;
 
         public OrderDAL()
         {
             this.context = new IronHelmDbContext();
-            conn = new SqlConnection(ironhelmrepo.Properties.Settings.Default.dbconnection);
+           
         }
 
         public DataTable getCustomerById(String clientId)
@@ -61,7 +58,7 @@ namespace Iron_helm_order_mgt.DAL
             order.orderStatusChangedDate = DateTime.Now;
             try 
             {
-                context.SaveChangesAsync();
+                context.SaveChanges();
              }
             catch (Exception e)
             {
@@ -69,7 +66,7 @@ namespace Iron_helm_order_mgt.DAL
             }
 }
 
-        public int createOrder(String clientId,DateTime expectedDate,List<OrderLineItem> lines)
+        public int createOrder(Order newOrder)
         {
             
             var newId = 1;
@@ -77,7 +74,7 @@ namespace Iron_helm_order_mgt.DAL
                 var maxId = this.context.Orders.Max(table => table.orderId);
                 newId = maxId + 1;
             }
-            Order newOrder = new Order(newId, lines, clientId, "NEW", DateTime.Now, DateTime.Now, expectedDate, 0,0,0);
+            newOrder.orderId = newId;
            try
             {
                 context.Orders.Add(newOrder);

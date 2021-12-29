@@ -1,4 +1,5 @@
-﻿using Iron_helm_order_mgt.DAL;
+﻿using Iron_helm_order_mgt;
+using Iron_helm_order_mgt.DAL;
 using ironhelmrepo.Views;
 using System;
 using System.Collections.Generic;
@@ -13,16 +14,18 @@ namespace ironhelmrepo.Presenters
     {
         private readonly ICustomerDetailsView view;
         private CustomerDAL customerDAL;
+        private Customer customer;
 
         public ClientDetailsPresenter(ICustomerDetailsView view)
         {
             this.view = view;
             customerDAL = new CustomerDAL();
+            customer = new Customer(view.clientId);
         }
 
         public DataTable getCustomerDetailsById()
         {
-            return customerDAL.getCustomerDetailsById(view.clientId);
+            return customer.getCustomerDetailsById();
         }
     }
 }

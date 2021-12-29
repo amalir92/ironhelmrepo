@@ -14,20 +14,21 @@ namespace ironhelmrepo.Presenters
     {
         private readonly IAdminPortalView view;
         private OrderDAL orderDAL;
+        private Order order;
 
         public AdminPortalPresenter(IAdminPortalView portalview)
         {
             this.view = portalview;
             orderDAL = new OrderDAL();
+            order = new Order();
         }
         public DataTable DisplayAllOrderData()
         {
-            DataTable dt = orderDAL.getOrders();
-            return dt;
+            return order.getAllOrders();
         }
         public Order getOrderById()
         {
-           return orderDAL.getOrderById(view.orderId);
+            return order.getOrderById(view.orderId);
         }
     }
 }

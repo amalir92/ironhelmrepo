@@ -49,5 +49,10 @@ namespace Iron_helm_order_mgt.Forms
         {
             Hide();
         }
+
+        private void Schedule_Order_Form_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

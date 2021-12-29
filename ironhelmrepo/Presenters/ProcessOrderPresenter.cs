@@ -16,47 +16,50 @@ namespace ironhelmrepo.Presenters
     {
         private readonly IProcessOrderView view;
         private OrderDAL orderDAL;
+        private Order order;
         private CustomerDAL customerDAL;
-        private OrderLineItemDAL orderLineItemDAL;
+        private Customer customer;
+        private OrderLineItem orderLineItem;
         private ProductCatalogDAL productCatalogDAL;
 
         public ProcessOrderPresenter(IProcessOrderView view)
         {
             this.view = view;
             this.orderDAL = new OrderDAL();
-            this.customerDAL = new CustomerDAL();
-            this.orderLineItemDAL = new OrderLineItemDAL();
+            order = new Order();
+            this.orderLineItem = new OrderLineItem();
             this.productCatalogDAL = new ProductCatalogDAL();
         }
 
         public string scheduleOrder()
         {
-            Order order = orderDAL.getOrderById(view.order.orderId);
+            Order order = view.order;
             return order.validateOrderStatusChange(OrderStatus.SCHEDULED);
         }
 
         public string progressOrder()
         {
-            Order order = orderDAL.getOrderById(view.order.orderId);
+            Order order = view.order;
             return order.validateOrderStatusChange(OrderStatus.PROGRESSING);
         }
         
 
         public string completeOrder()
         {
-            Order order = orderDAL.getOrderById(view.order.orderId);
+            Order order = view.order;
             return order.validateOrderStatusChange(OrderStatus.COMPLETED);
             
         }
 
         public Customer getCustomerById()
         {
-            return customerDAL.getCustomerById(view.order.ClientId);
+            customer = new Customer(view.order.ClientId);
+            return customer.getCustomerById();
         }
 
         public List<OrderLineItem> getOrderLinesByOrderId()
         {
-            return orderLineItemDAL.getOrderLinesById(view.order.orderId);
+            return orderLineItem.getOrderLinesByOrderId(view.order.orderId);
         }
 
         public string initiateProduction() 
@@ -73,13 +76,13 @@ namespace ironhelmrepo.Presenters
             if (customerSource == "STATE")
             {
                 IProductionFactory factory = new GovernmentItemProductionFactory();
-                ClientOrder storder = new ClientOrder(factory, products);
+                OrderProduction storder = new OrderProduction(factory, products,view.order);
                 return "GovernmentItemProductionFactory";
             }
             if (customerSource == "ENTERTAINMENT")
             {
                 IProductionFactory factory = new MovieItemProductionFactory();
-                ClientOrder mvorder = new ClientOrder(factory, products);
+                OrderProduction mvorder = new OrderProduction(factory, products,view.order);
                 return "MovieItemProductionFactory";
             }
             return "";

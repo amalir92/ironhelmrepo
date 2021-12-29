@@ -87,7 +87,7 @@
     <Compile Include="Entities\ProductCatalog.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Factory\Armour.cs" />
-    <Compile Include="Factory\ClientOrder.cs" />
+    <Compile Include="Factory\OrderProduction.cs" />
     <Compile Include="Factory\Delivery.cs" />
     <Compile Include="Factory\GovernmentItemProductionFactory.cs" />
     <Compile Include="Factory\IProductionFactory.cs" />
@@ -211,6 +211,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagram2.cd" />
     <None Include="ironhelm.cd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

@@ -1,4 +1,5 @@
-﻿using ironhelmrepo.Presenters;
+﻿using Iron_helm_order_mgt.Controls;
+using ironhelmrepo.Presenters;
 using ironhelmrepo.Views;
 using System;
 using System.Collections.Generic;
@@ -103,7 +104,7 @@ namespace Iron_helm_order_mgt
             else
             {              
                 int orderId =presenter.createOrder();
-                MessageBox.Show("Order Submitted Successfully");
+                MessageBox.Show("Order Submitted Successfully ");
                 this.Hide();
              }
                     

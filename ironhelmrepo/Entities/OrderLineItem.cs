@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Iron_helm_order_mgt.DAL;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,11 +11,13 @@ using System.Threading.Tasks;
 namespace Iron_helm_order_mgt
 {
     public class OrderLineItem
-    { 
+    {
+        private OrderLineItemDAL orderLineItemDAL;
         public OrderLineItem()
         {
-
+            orderLineItemDAL = new OrderLineItemDAL();
         }
+       
         public OrderLineItem(int orderLineItemId, Order orderId, string productCode, int quantity, int labourHoursPerItem, double costPerHour)
         {
             this.orderLineItemId = orderLineItemId;
@@ -53,5 +57,18 @@ namespace Iron_helm_order_mgt
             return costperLineProduction;
         }
 
+        public List<OrderLineItem> getOrderLinesByOrderId(int orderId)
+        {
+            return orderLineItemDAL.getOrderLinesById(orderId);
+        }
+        public DataTable getOrderLinesTableByOrderId(int orderId)
+        {
+            return orderLineItemDAL.getOrderLinesByOrderId(orderId);
+        }
+
+        public void updateOrderLine()
+        {
+            orderLineItemDAL.updateOrderLineItem(this);
+        }
     }
 }

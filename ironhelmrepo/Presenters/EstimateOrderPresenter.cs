@@ -13,17 +13,22 @@ namespace ironhelmrepo.Presenters
     {
         private readonly IEstimateOrderView view;
         private OrderDAL orderDAL;
+        private Order order;
+        private OrderLineItem orderLineItem;
         private OrderLineItemDAL orderLineItemDAL;
 
         public EstimateOrderPresenter(IEstimateOrderView view)
         {
             this.view = view;
             orderDAL = new OrderDAL();
+            order = new Order();
+            orderLineItem = new OrderLineItem();
+            
             orderLineItemDAL = new OrderLineItemDAL();
         }
         public List<OrderLineItem> getOrderLines()
         {
-            return orderLineItemDAL.getOrderLinesById(view.orderId);
+            return orderLineItem.getOrderLinesByOrderId(view.orderId);
         }
 
         public string estimateOrder()
@@ -42,7 +47,7 @@ namespace ironhelmrepo.Presenters
                     line.labourHoursPerItem = view.hours;
                     line.costPerHour = view.costPerHour;
                     line.calculateCostPerItemProduction();
-                    orderLineItemDAL.updateOrderLineItem(line);
+                    line.updateOrderLine();
                 }
             }
              
@@ -54,10 +59,9 @@ namespace ironhelmrepo.Presenters
             order.packageCost = view.packageCost;
             order.deliveryCost = view.deliveryCost;
             List<OrderLineItem> orderlines = getOrderLines();
-            
             order.TotalOrderPrice= order.calculateTotalCost(orderlines);
             order.updateOrder(order);
-            orderDAL.updateOrder(order);
+            
         }
 
     }

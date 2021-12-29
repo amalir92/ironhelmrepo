@@ -56,5 +56,10 @@ namespace Iron_helm_order_mgt.Forms
         {
             Hide();
         }
+
+        private void Order_Progress_Form_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
