@@ -59,6 +59,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="OrderDALTests.cs" />
+    <Compile Include="CustomerDALTests.cs" />
+    <Compile Include="OrderLineItemDALTests.cs" />
+    <Compile Include="ProductCatalogDALTests.cs" />
     <Compile Include="UserDALTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
