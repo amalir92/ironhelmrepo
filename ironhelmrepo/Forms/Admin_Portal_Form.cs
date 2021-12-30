@@ -14,7 +14,7 @@ using System.Windows.Forms;
 
 namespace Iron_helm_order_mgt
 {
-    public partial class Admin_Portal_Frm : Form, IAdminPortalView
+    public partial class Admin_Portal_Frm : Form, IPortalView
     {
 
         private AdminPortalPresenter presenter = null;
@@ -26,9 +26,9 @@ namespace Iron_helm_order_mgt
             set { }
         }
 
-        public int clientId
+        public string clientId
         {
-            get { return Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["Client Id"].Value); }
+            get { return dataGridView1.SelectedRows[0].Cells["Client Id"].Value.ToString(); }
             set { }
         }
 
@@ -124,7 +124,10 @@ namespace Iron_helm_order_mgt
 
                 if (state.orderStatuses.ContainsKey(Convert.ToInt32(row.Cells["Order Id"].Value)))
                 {
-                    row.Cells["Order Status"].Value = state.orderStatuses[Convert.ToInt32(row.Cells["Order Id"].Value)];
+                    row.Cells["Order Status"].Value = state.orderStatuses[Convert.ToInt32(row.Cells["Order Id"].Value)].orderStatus;
+                    row.Cells["Order Status Changed Date"].Value = state.orderStatuses[Convert.ToInt32(row.Cells["Order Id"].Value)].orderStatusChangedDate;
+                    row.Cells["Estimated Order Completion Date"].Value = state.orderStatuses[Convert.ToInt32(row.Cells["Order Id"].Value)].estimatedCompletionDate;
+                    row.Cells["Total Cost"].Value = state.orderStatuses[Convert.ToInt32(row.Cells["Order Id"].Value)].TotalOrderPrice;
                 }
 
             }

@@ -12,28 +12,22 @@ namespace ironhelmrepo.Presenters
     public class EstimateOrderPresenter
     {
         private readonly IEstimateOrderView view;
-        private OrderDAL orderDAL;
         private Order order;
         private OrderLineItem orderLineItem;
-        private OrderLineItemDAL orderLineItemDAL;
-
         public EstimateOrderPresenter(IEstimateOrderView view)
         {
             this.view = view;
-            orderDAL = new OrderDAL();
-            order = new Order();
-            orderLineItem = new OrderLineItem();
-            
-            orderLineItemDAL = new OrderLineItemDAL();
         }
         public List<OrderLineItem> getOrderLines()
         {
-            return orderLineItem.getOrderLinesByOrderId(view.orderId);
+            orderLineItem = new OrderLineItem(new Order(view.orderId,view.clientId));
+            return orderLineItem.getOrderLinesByOrderId();
         }
 
         public string estimateOrder()
         {
-            Order order = orderDAL.getOrderById(view.orderId);
+            order = new Order(view.orderId,view.clientId);
+            order = order.getOrderById();
             return order.validateOrderStatusChange(OrderStatus.ESTIMATED);
         }
 
@@ -55,11 +49,14 @@ namespace ironhelmrepo.Presenters
 
         public void updateOrder()
         {
-            Order order = orderDAL.getOrderById(view.orderId);
+            order = new Order(view.orderId, view.clientId);
+            order = order.getOrderById();
             order.packageCost = view.packageCost;
             order.deliveryCost = view.deliveryCost;
             List<OrderLineItem> orderlines = getOrderLines();
-            order.TotalOrderPrice= order.calculateTotalCost(orderlines);
+            order.OrderLineItems = orderlines;
+            order.TotalOrderPrice= order.calculateTotalCost();
+            order.orderStatus = "ESTIMATED";
             order.updateOrder(order);
             
         }

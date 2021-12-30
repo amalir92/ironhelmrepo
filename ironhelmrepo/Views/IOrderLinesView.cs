@@ -9,5 +9,7 @@ namespace ironhelmrepo.Views
     public interface IOrderLinesView
     {
         int orderId { get; set; }
+
+        string clientId { get; set; }
     }
 }

@@ -15,7 +15,7 @@ using System.Windows.Forms;
 
 namespace Iron_helm_order_mgt
 {
-    public partial class ClientPortal_Frm : Form, IClientPortalView
+    public partial class ClientPortal_Frm : Form, IPortalView
     {
         String username;
         private ClientPortalPresenter presenter = null;
@@ -105,7 +105,10 @@ namespace Iron_helm_order_mgt
 
                 if (state.orderStatuses.ContainsKey(Convert.ToInt32(row.Cells["Order Id"].Value)))
                 {
-                    row.Cells["Order Status"].Value = state.orderStatuses[Convert.ToInt32(row.Cells["Order Id"].Value)];
+                    row.Cells["Order Status"].Value = state.orderStatuses[Convert.ToInt32(row.Cells["Order Id"].Value)].orderStatus;
+                    row.Cells["Order Status Changed Date"].Value = state.orderStatuses[Convert.ToInt32(row.Cells["Order Id"].Value)].orderStatusChangedDate;
+                    row.Cells["Estimated Order Completion Date"].Value = state.orderStatuses[Convert.ToInt32(row.Cells["Order Id"].Value)].estimatedCompletionDate;
+                    row.Cells["Total Cost"].Value = state.orderStatuses[Convert.ToInt32(row.Cells["Order Id"].Value)].TotalOrderPrice;
                 }
 
             }
@@ -119,7 +122,8 @@ namespace Iron_helm_order_mgt
                 e.RowIndex >= 0)
             {
                 int orderId = Convert.ToInt32(OrderDataGrid.CurrentRow.Cells["Order Id"].FormattedValue);
-                Order_Lines_Form orderLinesFrm = new Order_Lines_Form(orderId);
+                string clientId = this.username;
+                Order_Lines_Form orderLinesFrm = new Order_Lines_Form(orderId,clientId);
                 orderLinesFrm.Show();
             }
 

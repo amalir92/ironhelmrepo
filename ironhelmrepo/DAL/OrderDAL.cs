@@ -26,7 +26,7 @@ namespace Iron_helm_order_mgt.DAL
             dt.Columns.Add("Order Status", typeof(string));
             dt.Columns.Add("Order Status Changed Date", typeof(DateTime));
             dt.Columns.Add("Expected Order Completion Changed Date", typeof(DateTime));
-            dt.Columns.Add("Estimated Order Completion Changed Date", typeof(DateTime));
+            dt.Columns.Add("Estimated Order Completion Date", typeof(DateTime));
             dt.Columns.Add("Total Cost", typeof(Double));
             var query = from o in context.Orders.AsEnumerable()
                         where o.ClientId == clientId
@@ -45,17 +45,17 @@ namespace Iron_helm_order_mgt.DAL
             return dt;
         }
 
-        public Order getOrderById(int orderId)
+        public Order getOrderById(Order order_)
         {
-            Order order = context.Orders.Single(o => o.orderId == orderId);
+            Order order = context.Orders.Single(o => o.orderId == order_.orderId);
             return order;
         }
 
-        public void setOrderStatus(int orderId,OrderStatus status)
+        public void setOrderStatus(Order order_)
         {
-            Order order = context.Orders.Single(o => o.orderId == orderId);
-            order.orderStatus = Enum.GetName(typeof(OrderStatus), status);
-            order.orderStatusChangedDate = DateTime.Now;
+            Order order = context.Orders.Single(o => o.orderId == order_.orderId);
+            order.orderStatus = order_.orderStatus;
+            order.orderStatusChangedDate = order_.orderStatusChangedDate;
             try 
             {
                 context.SaveChanges();
@@ -111,7 +111,7 @@ namespace Iron_helm_order_mgt.DAL
             dt.Columns.Add("Order Status", typeof(string));
             dt.Columns.Add("Order Status Changed Date", typeof(DateTime));
             dt.Columns.Add("Expected Order Completion Changed Date", typeof(DateTime));
-            dt.Columns.Add("Estimated Order Completion Changed Date", typeof(DateTime));
+            dt.Columns.Add("Estimated Order Completion Date", typeof(DateTime));
             dt.Columns.Add("Total Cost", typeof(Double));
             var query = from o in context.Orders.AsEnumerable()
                         orderby o.orderStatusChangedDate descending

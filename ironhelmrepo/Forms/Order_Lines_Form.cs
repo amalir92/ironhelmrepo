@@ -16,19 +16,27 @@ namespace Iron_helm_order_mgt.Forms
     {
 
         private OrderLinesPresenter presenter=null;
-        int order_Id = 0;
-        public Order_Lines_Form(int orderId)
+        int orderId_ = 0;
+        string clientId_;
+        public Order_Lines_Form(int orderId,string clientId)
         {
             InitializeComponent();
-            this.order_Id = orderId;
+            this.orderId_ = orderId;
+            this.clientId_ = clientId;
             presenter = new OrderLinesPresenter(this);
         }
 
         public int orderId 
         {
-            get { return order_Id; }
+            get { return this.orderId_; }
             set {  }
         }
+        public string clientId
+        {
+            get { return this.clientId_; }
+            set { }
+        }
+
 
         private void Order_Lines_Form_Load(object sender, EventArgs e)
         { 

@@ -21,6 +21,12 @@ namespace Iron_helm_order_mgt.Forms
             get { return order.orderId; }
             set { }
         }
+
+        public string clientId
+        {
+            get { return order.ClientId; }
+            set { }
+        }
         public string orderStatus
         {
             get { return order.orderStatus; }
@@ -140,10 +146,11 @@ namespace Iron_helm_order_mgt.Forms
 
         private void schedule_btn_Click(object sender, EventArgs e)
         {
-            presenter.updateOrder();
+            
             string status = presenter.estimateOrder();
             if (status.Equals("SUCCESS"))
             {
+                presenter.updateOrder();
                 MessageBox.Show("Order estimated succesfully");
             }
             else

@@ -11,6 +11,7 @@ namespace ironhelmrepo.Views
     {
         int orderId { get; set; }
 
+        string clientId { get; set; }
         string orderStatus { get; set; }
 
         DateTime estimatedDate { get; set; }

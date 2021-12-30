@@ -17,9 +17,16 @@ namespace Iron_helm_order_mgt
         {
             orderLineItemDAL = new OrderLineItemDAL();
         }
-       
+
+        public OrderLineItem(Order orderId)
+        {
+            orderLineItemDAL = new OrderLineItemDAL();
+            OrderId = orderId;
+        }
+
         public OrderLineItem(int orderLineItemId, Order orderId, string productCode, int quantity, int labourHoursPerItem, double costPerHour)
         {
+            orderLineItemDAL = new OrderLineItemDAL();
             this.orderLineItemId = orderLineItemId;
             OrderId = orderId;
             this.productCode = productCode;
@@ -29,6 +36,7 @@ namespace Iron_helm_order_mgt
         }
         public OrderLineItem(string productCode, int quantity)
         {
+            orderLineItemDAL = new OrderLineItemDAL();
             this.productCode = productCode;
             this.quantity = quantity;
         }
@@ -57,13 +65,13 @@ namespace Iron_helm_order_mgt
             return costperLineProduction;
         }
 
-        public List<OrderLineItem> getOrderLinesByOrderId(int orderId)
+        public List<OrderLineItem> getOrderLinesByOrderId()
         {
-            return orderLineItemDAL.getOrderLinesById(orderId);
+            return orderLineItemDAL.getOrderLinesById(this.OrderId.orderId);
         }
-        public DataTable getOrderLinesTableByOrderId(int orderId)
+        public DataTable getOrderLinesTableByOrderId()
         {
-            return orderLineItemDAL.getOrderLinesByOrderId(orderId);
+            return orderLineItemDAL.getOrderLinesByOrderId(this.OrderId.orderId);
         }
 
         public void updateOrderLine()

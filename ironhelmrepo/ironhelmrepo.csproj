@@ -50,6 +50,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>false</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.3.0\lib\net45\EntityFramework.dll</HintPath>
@@ -87,6 +96,9 @@
     <Compile Include="Entities\ProductCatalog.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Factory\Armour.cs" />
+    <Compile Include="Factory\CustomArmour.cs" />
+    <Compile Include="Factory\CustomItemProductionFactory.cs" />
+    <Compile Include="Factory\CustomSword.cs" />
     <Compile Include="Factory\OrderProduction.cs" />
     <Compile Include="Factory\Delivery.cs" />
     <Compile Include="Factory\GovernmentItemProductionFactory.cs" />
@@ -166,8 +178,7 @@
     <Compile Include="Presenters\ProcessOrderPresenter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Views\IAdminPortalView.cs" />
-    <Compile Include="Views\IClientPortalView.cs" />
+    <Compile Include="Views\IPortalView.cs" />
     <Compile Include="Views\ICreateOrderView.cs" />
     <Compile Include="Views\ICustomerDetailsView.cs" />
     <Compile Include="Views\IEstimateOrderView.cs" />
@@ -210,8 +221,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="ClassDiagram1.cd" />
     <None Include="ironhelm.cd" />
     <None Include="packages.config" />
+    <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

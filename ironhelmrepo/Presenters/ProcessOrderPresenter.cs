@@ -15,20 +15,13 @@ namespace ironhelmrepo.Presenters
     public class ProcessOrderPresenter
     {
         private readonly IProcessOrderView view;
-        private OrderDAL orderDAL;
         private Order order;
-        private CustomerDAL customerDAL;
         private Customer customer;
         private OrderLineItem orderLineItem;
-        private ProductCatalogDAL productCatalogDAL;
 
         public ProcessOrderPresenter(IProcessOrderView view)
         {
             this.view = view;
-            this.orderDAL = new OrderDAL();
-            order = new Order();
-            this.orderLineItem = new OrderLineItem();
-            this.productCatalogDAL = new ProductCatalogDAL();
         }
 
         public string scheduleOrder()
@@ -59,7 +52,8 @@ namespace ironhelmrepo.Presenters
 
         public List<OrderLineItem> getOrderLinesByOrderId()
         {
-            return orderLineItem.getOrderLinesByOrderId(view.order.orderId);
+            this.orderLineItem = new OrderLineItem(view.order);
+            return orderLineItem.getOrderLinesByOrderId();
         }
 
         public string initiateProduction() 
@@ -69,7 +63,8 @@ namespace ironhelmrepo.Presenters
             List<ProductCatalog> products = new List<ProductCatalog>();
             foreach (OrderLineItem l in lines)
             {
-                products.Add(productCatalogDAL.getProductById(l.productCode));
+                ProductCatalog p = new ProductCatalog(l.productCode);
+                products.Add(p.getProductById());
             }
 
             string customerSource = Enum.GetName(typeof(CustomerSource), customer.customerSource);

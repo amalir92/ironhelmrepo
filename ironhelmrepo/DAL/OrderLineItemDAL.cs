@@ -22,27 +22,27 @@ namespace Iron_helm_order_mgt.DAL
             
         }
 
-        public void createOrderLine(int orderNo, String productId, int quantity, int labourHours, double costPerHour)
-        {
-            var newId = 1;
-            if (this.context.orderLineItems.Count() != 0)
-            {
-                var maxId = this.context.orderLineItems.Max(table => table.orderLineItemId);
-                newId = maxId + 1;
-            }
-            OrderLineItem newOrderLine = new OrderLineItem(newId, orderDal.getOrderById(orderNo),productId,quantity,labourHours,costPerHour);
+        //public void createOrderLine(int orderNo, String productId, int quantity, int labourHours, double costPerHour)
+        //{
+        //    var newId = 1;
+        //    if (this.context.orderLineItems.Count() != 0)
+        //    {
+        //        var maxId = this.context.orderLineItems.Max(table => table.orderLineItemId);
+        //        newId = maxId + 1;
+        //    }
+        //    OrderLineItem newOrderLine = new OrderLineItem(newId, orderDal.getOrderById(orderNo),productId,quantity,labourHours,costPerHour);
 
-            try
-            {
-                context.orderLineItems.Add(newOrderLine);
-                context.SaveChanges();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Error " + e);
-            }
+        //    try
+        //    {
+        //        context.orderLineItems.Add(newOrderLine);
+        //        context.SaveChanges();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine("Error " + e);
+        //    }
 
-            }
+        //    }
 
             public DataTable getOrderLinesByOrderId(int orderId)
         {

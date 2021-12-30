@@ -26,9 +26,16 @@ namespace Iron_helm_order_mgt
 
         public ProductCatalog(string productId,string productName, string productDescription)
         {
+            productCatalogDAL = new ProductCatalogDAL();
             this.productId = productId;
             this.productName = productName;
             this.productDescription = productDescription;
+        }
+
+        public ProductCatalog(string productId)
+        {
+            productCatalogDAL = new ProductCatalogDAL();
+            this.productId = productId;
         }
 
         public ProductCatalog createNewProduct(string productId,string productName,string productDescription)
@@ -40,6 +47,12 @@ namespace Iron_helm_order_mgt
         {
             return productCatalogDAL.getAllPoducts(); 
         }
+
+        public ProductCatalog getProductById()
+        {
+            return productCatalogDAL.getProductById(this.productId);
+        }
+
 
     }
 }

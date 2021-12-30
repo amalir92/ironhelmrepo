@@ -42,8 +42,21 @@ namespace Iron_helm_order_mgt
 
         public double TotalOrderPrice { get; set; }
 
+        public Order(string clientId)
+        {
+            dal = new OrderDAL();
+            ClientId = clientId;
+        }
+        public Order(int orderId, string clientId)
+        {
+            dal = new OrderDAL();
+            this.orderId = orderId;
+            ClientId = clientId;
+        }
+
         public Order(int orderId, ICollection<OrderLineItem> orderLineItems, string clientId, string orderStatus, DateTime orderStatusChangedDate, DateTime estimatedCompletionDate, DateTime expectedOrderDate, double packageCost, double deliveryCost, double totalOrderPrice)
         {
+            dal = new OrderDAL();
             this.orderId = orderId;
             this.OrderLineItems = orderLineItems;
             this.ClientId = clientId;
@@ -58,6 +71,7 @@ namespace Iron_helm_order_mgt
 
         public Order(int orderId, string clientId, string orderStatus, DateTime orderStatusChangedDate, DateTime estimatedCompletionDate, DateTime expectedOrderDate, double packageCost, double deliveryCost, double totalOrderPrice)
         {
+            dal = new OrderDAL();
             this.orderId = orderId;
             this.ClientId = clientId;
             this.orderStatus = orderStatus;
@@ -70,6 +84,7 @@ namespace Iron_helm_order_mgt
         }
         public Order(List<OrderLineItem> lines, string clientId, string orderStatus, DateTime orderStatusChangedDate, DateTime estimatedCompletionDate, DateTime expectedOrderDate, double packageCost, double deliveryCost, double totalOrderPrice)
         {
+            dal = new OrderDAL();
             this.OrderLineItems = lines;
             this.ClientId = clientId;
             this.orderStatus = orderStatus;
@@ -90,7 +105,6 @@ namespace Iron_helm_order_mgt
             this.OrderLineItems = lines;
             this.ClientId = clientId;
             this.expectedOrderDate = expectedDate;
-            this.state = ApplicationState.getState();
             dal = new OrderDAL();
         }
 
@@ -100,7 +114,8 @@ namespace Iron_helm_order_mgt
             this.orderStatusChangedDate = DateTime.Now;
             this.estimatedCompletionDate = DateTime.Now;
             int orderId = dal.createOrder(this);
-            state.orderStatuses.Add(orderId, "NEW");
+            this.state = ApplicationState.getState();
+            state.orderStatuses.Add(orderId, this);
             return orderId;
         }
 
@@ -109,14 +124,17 @@ namespace Iron_helm_order_mgt
             this.orderStatus = order.orderStatus;
             this.orderStatusChangedDate = order.orderStatusChangedDate;
             this.estimatedCompletionDate = order.estimatedCompletionDate;
-            TotalOrderPrice = order.TotalOrderPrice;
+            this.TotalOrderPrice = order.TotalOrderPrice;
             dal.updateOrder(order);
+            this.state = ApplicationState.getState();
+            state.orderStatuses[this.orderId]=this;
 
         }
 
-        public double calculateTotalCost(List<OrderLineItem> lines)
+        public double calculateTotalCost()
         {
             double tcost = 0;
+            List<OrderLineItem> lines = this.OrderLineItems.ToList();
             foreach (OrderLineItem item in lines)
             {
                 tcost = tcost + item.calculateCostPerItemProduction();
@@ -134,8 +152,9 @@ namespace Iron_helm_order_mgt
                 if (this.orderStatus != null && this.orderStatus.Equals(Enum.GetName(typeof(OrderStatus), OrderStatus.ESTIMATED)))
                 {
                     this.orderStatus = (Enum.GetName(typeof(OrderStatus), OrderStatus.ACCEPTED));
-                    dal.setOrderStatus(this.orderId, OrderStatus.ACCEPTED);
-                    state.orderStatuses.Add(orderId, "ACCEPTED");
+                    this.orderStatusChangedDate = DateTime.Now;
+                    dal.setOrderStatus(this);
+                    state.orderStatuses.Add(orderId, this);
                     return "SUCCESS";
                 }
                 else
@@ -148,8 +167,9 @@ namespace Iron_helm_order_mgt
                 if (this.orderStatus != null && this.orderStatus.Equals(Enum.GetName(typeof(OrderStatus), OrderStatus.NEW)))
                 {
                     this.orderStatus = (Enum.GetName(typeof(OrderStatus), OrderStatus.CANCELLED));
-                    dal.setOrderStatus(this.orderId, OrderStatus.CANCELLED);
-                    state.orderStatuses.Add(orderId, "CANCELLED");
+                    this.orderStatusChangedDate = DateTime.Now;
+                    dal.setOrderStatus(this);
+                    state.orderStatuses.Add(orderId, this);
                     return "SUCCESS";
                 }
                 else
@@ -162,8 +182,9 @@ namespace Iron_helm_order_mgt
                 if (this.orderStatus != null && this.orderStatus.Equals(Enum.GetName(typeof(OrderStatus), OrderStatus.NEW)))
                 {
                     this.orderStatus = (Enum.GetName(typeof(OrderStatus), OrderStatus.ESTIMATED));
-                    dal.setOrderStatus(this.orderId, OrderStatus.ESTIMATED);
-                    state.orderStatuses.Add(orderId, "ESTIMATED");
+                    this.orderStatusChangedDate = DateTime.Now;
+                    dal.setOrderStatus(this);
+                    state.orderStatuses[orderId]=this;
                     return "SUCCESS";
                 }
                 else
@@ -176,8 +197,9 @@ namespace Iron_helm_order_mgt
                 if (this.orderStatus != null && this.orderStatus.Equals(Enum.GetName(typeof(OrderStatus), OrderStatus.ACCEPTED)))
                 {
                     this.orderStatus = (Enum.GetName(typeof(OrderStatus), OrderStatus.SCHEDULED));
-                    dal.setOrderStatus(this.orderId, OrderStatus.SCHEDULED);
-                    state.orderStatuses.Add(orderId, "SCHEDULED");
+                    this.orderStatusChangedDate = DateTime.Now;
+                    dal.setOrderStatus(this);
+                    state.orderStatuses[orderId] = this;
                     return "SUCCESS";
                 }
                 else
@@ -190,8 +212,9 @@ namespace Iron_helm_order_mgt
                 if (this.orderStatus != null && this.orderStatus.Equals(Enum.GetName(typeof(OrderStatus), OrderStatus.SCHEDULED)))
                 {
                     this.orderStatus = (Enum.GetName(typeof(OrderStatus), OrderStatus.PROGRESSING));
-                    dal.setOrderStatus(this.orderId, OrderStatus.PROGRESSING);
-                    state.orderStatuses.Add(orderId, "PROGRESSING");
+                    this.orderStatusChangedDate = DateTime.Now;
+                    dal.setOrderStatus(this);
+                    state.orderStatuses[orderId] = this;
                     return "SUCCESS";
                 }
                 else
@@ -204,8 +227,9 @@ namespace Iron_helm_order_mgt
                 if (this.orderStatus != null && this.orderStatus.Equals(Enum.GetName(typeof(OrderStatus), OrderStatus.PROGRESSING)) || this.orderStatus.Equals(Enum.GetName(typeof(OrderStatus), OrderStatus.SCHEDULED)))
                 {
                     this.orderStatus = (Enum.GetName(typeof(OrderStatus), OrderStatus.COMPLETED));
-                    dal.setOrderStatus(this.orderId, OrderStatus.COMPLETED);
-                    state.orderStatuses.Add(orderId, "COMPLETED");
+                    this.orderStatusChangedDate = DateTime.Now;
+                    dal.setOrderStatus(this);
+                    state.orderStatuses[orderId] = this;
                     return "SUCCESS";
                 }
                 else
@@ -216,10 +240,9 @@ namespace Iron_helm_order_mgt
             return "";
         }
 
-        public DataTable getCustomerOrdersById(string clientId)
+        public DataTable getCustomerOrdersById()
         {
-            this.ClientId = clientId;
-            DataTable dt = dal.getCustomerById(clientId);
+            DataTable dt = dal.getCustomerById(this.ClientId);
             return dt;
         }
 
@@ -229,9 +252,9 @@ namespace Iron_helm_order_mgt
             return dt;
         }
 
-        public Order getOrderById(int orderId)
+        public Order getOrderById()
         {
-            return dal.getOrderById(orderId);
+            return dal.getOrderById(this);
         }
     }
 }

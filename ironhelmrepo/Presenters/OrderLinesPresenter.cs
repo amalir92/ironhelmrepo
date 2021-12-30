@@ -17,13 +17,12 @@ namespace ironhelmrepo.Presenters
         public OrderLinesPresenter(IOrderLinesView view)
         {
             this.view = view;
-            orderLineItem = new OrderLineItem();
-
         }
 
         public DataTable getOrderLines()
         {
-            return orderLineItem.getOrderLinesTableByOrderId(view.orderId);
+            orderLineItem = new OrderLineItem(new Order(view.orderId,view.clientId));
+            return orderLineItem.getOrderLinesTableByOrderId();
 
         }
     }
