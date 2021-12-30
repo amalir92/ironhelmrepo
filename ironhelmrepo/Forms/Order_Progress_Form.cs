@@ -1,6 +1,6 @@
 ﻿using Iron_helm_order_mgt.Entities;
 using Iron_helm_order_mgt.Factory;
-using Iron_helm_order_mgt.Service;
+
 using ironhelmrepo.Presenters;
 using ironhelmrepo.Views;
 using System;
@@ -55,6 +55,11 @@ namespace Iron_helm_order_mgt.Forms
         private void finish_btn_Click(object sender, EventArgs e)
         {
             Hide();
+        }
+
+        private void Order_Progress_Form_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

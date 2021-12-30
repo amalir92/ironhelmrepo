@@ -1,5 +1,4 @@
-﻿using Iron_helm_order_mgt.Service;
-using ironhelmrepo.Presenters;
+﻿using ironhelmrepo.Presenters;
 using ironhelmrepo.Views;
 using System;
 using System.Collections.Generic;
@@ -49,6 +48,11 @@ namespace Iron_helm_order_mgt.Forms
         private void cancel_btn_Click(object sender, EventArgs e)
         {
             Hide();
+        }
+
+        private void Schedule_Order_Form_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

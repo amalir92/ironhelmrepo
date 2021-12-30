@@ -1,32 +1,28 @@
-﻿using Iron_helm_order_mgt.Controls;
-using Iron_helm_order_mgt.Service;
+﻿using Iron_helm_order_mgt;
+using Iron_helm_order_mgt.Controls;
+using Iron_helm_order_mgt.DAL;
 using ironhelmrepo.Views;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace ironhelmrepo.Presenters
 {
     public class LoginPresenter
     {
         private readonly ILoginView loginView;
-        private UserService userService;
+        private User user;
 
         public LoginPresenter(ILoginView loginView)
         {
             this.loginView = loginView;
-            userService = new UserService();
-
+            
         }
+        
         public DataTable getUserByLoginId()
         {
-            DataTable dt = userService.getloginByUserNameAndPassword(loginView.username,loginView.password);
-            return dt;
+            user = new User(loginView.username, loginView.password);
+            return user.getUserByLoginId();
         }
-
         public void getStateInfo()
         {
             ApplicationState state = ApplicationState.getState();

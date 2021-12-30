@@ -90,6 +90,7 @@ namespace Iron_helm_order_mgt
             this.Controls.Add(this.username_lbl);
             this.Name = "Login_frm";
             this.Text = "Login";
+            this.Load += new System.EventHandler(this.Login_frm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

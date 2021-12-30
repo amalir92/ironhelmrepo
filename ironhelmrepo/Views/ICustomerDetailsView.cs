@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Iron_helm_order_mgt.Factory
+namespace ironhelmrepo.Views
 {
-    public abstract class Swords:ProductCatalog
+    public interface ICustomerDetailsView
     {
-       
+        string clientId { get; set; }
     }
 }

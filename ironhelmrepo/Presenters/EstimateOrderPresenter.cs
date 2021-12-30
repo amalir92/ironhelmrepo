@@ -1,5 +1,5 @@
 ﻿using Iron_helm_order_mgt;
-using Iron_helm_order_mgt.Service;
+using Iron_helm_order_mgt.DAL;
 using ironhelmrepo.Views;
 using System;
 using System.Collections.Generic;
@@ -12,34 +12,57 @@ namespace ironhelmrepo.Presenters
     public class EstimateOrderPresenter
     {
         private readonly IEstimateOrderView view;
-        private OrderService orderService;
-        private OrderLineItemService orderLineItemService;
+        private OrderDAL orderDAL;
+        private Order order;
+        private OrderLineItem orderLineItem;
+        private OrderLineItemDAL orderLineItemDAL;
 
         public EstimateOrderPresenter(IEstimateOrderView view)
         {
             this.view = view;
-            orderService = new OrderService();
-            orderLineItemService = new OrderLineItemService();
+            orderDAL = new OrderDAL();
+            order = new Order();
+            orderLineItem = new OrderLineItem();
+            
+            orderLineItemDAL = new OrderLineItemDAL();
         }
         public List<OrderLineItem> getOrderLines()
         {
-            return orderLineItemService.getOrderLinesById(view.orderId);
+            return orderLineItem.getOrderLinesByOrderId(view.orderId);
         }
 
         public string estimateOrder()
         {
-            return orderService.estimateOrder(view.orderStatus, view.orderId);
+            Order order = orderDAL.getOrderById(view.orderId);
+            return order.validateOrderStatusChange(OrderStatus.ESTIMATED);
         }
 
-        public void updateOrder() 
+        public void updateOrderLines() 
         {
-             orderService.updateOrder(view.orderId,view.estimatedDate,view.totalCost);
+             List<OrderLineItem> orderlines = getOrderLines();
+             foreach(OrderLineItem line in orderlines)
+            {
+                if (line.productCode.Equals(view.productCode))
+                {
+                    line.labourHoursPerItem = view.hours;
+                    line.costPerHour = view.costPerHour;
+                    line.calculateCostPerItemProduction();
+                    line.updateOrderLine();
+                }
+            }
+             
         }
 
-        public double calculateTotalCost()
+        public void updateOrder()
         {
-            double tcost = 0;
-            return tcost;
+            Order order = orderDAL.getOrderById(view.orderId);
+            order.packageCost = view.packageCost;
+            order.deliveryCost = view.deliveryCost;
+            List<OrderLineItem> orderlines = getOrderLines();
+            order.TotalOrderPrice= order.calculateTotalCost(orderlines);
+            order.updateOrder(order);
+            
         }
+
     }
 }

@@ -15,6 +15,17 @@ namespace ironhelmrepo.Views
 
         DateTime estimatedDate { get; set; }
 
+        double packageCost { get; set; }
+
+        double deliveryCost { get; set; }
         double totalCost { get; set; }
+
+        int hours { get; set; }
+
+        double costPerHour { get; set; }
+
+        string productCode { get; set; }
+
+        int quantity { get; set; }
     }
 }

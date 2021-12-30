@@ -1,4 +1,5 @@
-﻿using Iron_helm_order_mgt.Service;
+﻿using Iron_helm_order_mgt;
+using Iron_helm_order_mgt.DAL;
 using ironhelmrepo.Views;
 using System;
 using System.Collections.Generic;
@@ -12,30 +13,32 @@ namespace ironhelmrepo.Presenters
     public class ClientPortalPresenter
     {
         private readonly IClientPortalView portalview;
-        private OrderService orderService;
-        private OrderLineItemService orderLineItemService;
+        private Order order;
+        private OrderDAL orderDAL;
+        private OrderLineItemDAL orderLineItemDAL;
 
         public ClientPortalPresenter(IClientPortalView portalview)
         {
             this.portalview = portalview;
-            orderService = new OrderService();
-            orderLineItemService = new OrderLineItemService();
+            order = new Order();
+            orderDAL = new OrderDAL();
+            orderLineItemDAL = new OrderLineItemDAL();
 
         }
         public DataTable DisplayClientOrderData()
         {
-            DataTable dt = orderService.getCustomerByUseId(portalview.clientId);
-            return dt;
+            return order.getCustomerOrdersById(portalview.clientId);
         }
 
         public string AcceptOrder()
         {
-            return  orderService.acceptOrder(portalview.orderStatus, portalview.orderId);
+            Order order = orderDAL.getOrderById(portalview.orderId);
+            return order.validateOrderStatusChange(OrderStatus.ACCEPTED);
         }
-
         public string CancelOrder()
         {
-            return orderService.cancelOrder(portalview.orderStatus, portalview.orderId);
+            Order order = orderDAL.getOrderById(portalview.orderId);
+            return order.validateOrderStatusChange(OrderStatus.CANCELLED);
         }
 
     }

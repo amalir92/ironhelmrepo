@@ -1,5 +1,4 @@
-﻿using Iron_helm_order_mgt.Service;
-using ironhelmrepo.Presenters;
+﻿using ironhelmrepo.Presenters;
 using ironhelmrepo.Views;
 using System;
 using System.Collections.Generic;
@@ -25,19 +24,52 @@ namespace Iron_helm_order_mgt.Forms
         public string orderStatus
         {
             get { return order.orderStatus; }
-            set { }
+            set { order.orderStatus = value; }
         }
         public DateTime estimatedDate
         {
             get { return dateTimePicker1.Value; }
-            set { }
+            set { dateTimePicker1.Value = value; }
         }
         public double totalCost
         { 
             get { return Convert.ToDouble(totalCost_txt.Text); }
-            set { }
+            set { totalCost_txt.Text = value.ToString(); }
         }
 
+        public double packageCost
+        { 
+          get { return Convert.ToDouble(packagingCost_txt.Text); }
+          set { packagingCost_txt.Text = value.ToString(); }
+        }
+        public double deliveryCost 
+        {
+            get{ return Convert.ToDouble(deliveryCost_txt.Text); }
+            set { deliveryCost_txt.Text = value.ToString(); }
+        }
+
+        public int hours
+        {
+            get { return Convert.ToInt32(hours_txt.Text); }
+            set { hours_txt.Text = value.ToString(); }
+        }
+
+        public double costPerHour
+        {
+            get { return Convert.ToDouble(cost_txt.Text); }
+            set { cost_txt.Text = value.ToString(); }
+        }
+
+        public string productCode
+        {
+            get { return products_cmb.SelectedItem.ToString().Split('-')[0]; }
+            set { }
+        }
+        public int quantity 
+        {
+            get { return Convert.ToInt32(products_cmb.SelectedItem.ToString().Split('-')[1]); }
+            set { }
+        }
         public Estimate_Order_Form(Order order)
         {
             InitializeComponent();
@@ -61,12 +93,11 @@ namespace Iron_helm_order_mgt.Forms
         private void load_products()
         {
             List<OrderLineItem> lines = presenter.getOrderLines();
-            foreach(OrderLineItem l in lines)
+            foreach (OrderLineItem l in lines)
             {
                 products_cmb.Items.Add(l.productCode + "-" + l.quantity);
-               
-            }
-            
+
+            }          
 
         }
 
@@ -79,6 +110,7 @@ namespace Iron_helm_order_mgt.Forms
                     Convert.ToInt32(hours_txt.Text),
                     Convert.ToDouble(cost_txt.Text));
                 dataGridView1.DataSource = dt;
+                presenter.updateOrderLines();
                 products_cmb.SelectedIndex = -1;
                 hours_txt.Text = "";
                 cost_txt.Text = "";
@@ -97,7 +129,6 @@ namespace Iron_helm_order_mgt.Forms
         private void button1_Click(object sender, EventArgs e)
         {
             Double cost = 0;
-
             foreach (DataGridViewRow row in dataGridView1.Rows)
             {
                 cost = cost + Convert.ToInt32(row.Cells[1].Value) * Convert.ToInt32(row.Cells[2].Value) * Convert.ToDouble(row.Cells[3].Value);
@@ -109,8 +140,6 @@ namespace Iron_helm_order_mgt.Forms
 
         private void schedule_btn_Click(object sender, EventArgs e)
         {
-            DateTime estimatedDate = dateTimePicker1.Value;
-            Double cost = Convert.ToDouble(totalCost_txt.Text);
             presenter.updateOrder();
             string status = presenter.estimateOrder();
             if (status.Equals("SUCCESS"))

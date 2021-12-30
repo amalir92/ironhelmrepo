@@ -29,10 +29,10 @@ namespace Iron_helm_order_mgt.DAL
                             user.userId,
                             user.userType
                             }, false);
-           // if (query != null && query.Any())
-           // {
+            if (query != null && query.Any())
+            { 
                 query?.CopyToDataTable();
-          //  }
+           }
 
 
             return dt;

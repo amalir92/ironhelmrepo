@@ -102,6 +102,7 @@ namespace Iron_helm_order_mgt.Forms
             this.Controls.Add(this.label1);
             this.Name = "Order_Progress_Form";
             this.Text = "Order Progress Form";
+            this.Load += new System.EventHandler(this.Order_Progress_Form_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

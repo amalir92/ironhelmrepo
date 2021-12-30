@@ -1,4 +1,4 @@
-﻿using Iron_helm_order_mgt.Service;
+﻿using Iron_helm_order_mgt.Controls;
 using ironhelmrepo.Presenters;
 using ironhelmrepo.Views;
 using System;
@@ -39,10 +39,9 @@ namespace Iron_helm_order_mgt
             {
                 for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
                 {
-                    OrderLineItem item = new OrderLineItem();
-                    item.quantity = Convert.ToInt32(dataGridView1.Rows[i].Cells["Quantity"].Value);
-                    //ProductCatalog p = productService.getProductById();
-                    item.productCode = dataGridView1.Rows[i].Cells["Product Code"].Value.ToString();
+                    int quantity = Convert.ToInt32(dataGridView1.Rows[i].Cells["Quantity"].Value);
+                    string productCode = dataGridView1.Rows[i].Cells["Product Code"].Value.ToString();
+                    OrderLineItem item = new OrderLineItem(productCode, quantity);  
                     lines.Add(item);
                 }
                 return lines;
@@ -105,7 +104,7 @@ namespace Iron_helm_order_mgt
             else
             {              
                 int orderId =presenter.createOrder();
-                MessageBox.Show("Order Submitted Successfully");
+                MessageBox.Show("Order Submitted Successfully ");
                 this.Hide();
              }
                     

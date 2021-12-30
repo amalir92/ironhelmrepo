@@ -1,5 +1,5 @@
-﻿using Iron_helm_order_mgt.Forms;
-using Iron_helm_order_mgt.Service;
+﻿using Iron_helm_order_mgt.Controls;
+using Iron_helm_order_mgt.Forms;
 using ironhelmrepo.Presenters;
 using ironhelmrepo.Views;
 using System;
@@ -19,11 +19,11 @@ namespace Iron_helm_order_mgt
     {
         String username;
         private ClientPortalPresenter presenter = null;
-
+        private ApplicationState state = null;
         public string clientId
         {
             get { return username; }
-            set { }
+            set { username = value; }
         }
         public string orderStatus
         {
@@ -99,6 +99,16 @@ namespace Iron_helm_order_mgt
         private void refresh_btn_Click(object sender, EventArgs e)
         {
             OrderDataGrid.DataSource = presenter.DisplayClientOrderData();
+            this.state = ApplicationState.getState();
+            foreach (DataGridViewRow row in OrderDataGrid.Rows)
+            {
+
+                if (state.orderStatuses.ContainsKey(Convert.ToInt32(row.Cells["Order Id"].Value)))
+                {
+                    row.Cells["Order Status"].Value = state.orderStatuses[Convert.ToInt32(row.Cells["Order Id"].Value)];
+                }
+
+            }
         }
 
         private void OrderDataGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)

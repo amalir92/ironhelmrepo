@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Iron_helm_order_mgt
 {
-    public class IronHelmDBContextInitializer:DropCreateDatabaseIfModelChanges<IronHelmDbContext>
+    public class IronHelmDBContextInitializer : DropCreateDatabaseIfModelChanges<IronHelmDbContext>
     {
         protected override void Seed(IronHelmDbContext context)
         {
@@ -37,7 +37,7 @@ namespace Iron_helm_order_mgt
 
             context.orderLineItems.AddRange(new[]
            {
-                new OrderLineItem {orderLineItemId=1,productCode="001P",quantity=1,pricePerItem=0,OrderId=new Order {orderId=1,ClientId="001C",orderStatus="NEW",orderStatusChangedDate=DateTime.Now,expectedOrderDate=DateTime.Now.AddMonths(1),estimatedCompletionDate=DateTime.Now.AddMonths(1),TotalOrderPrice=0}
+                new OrderLineItem {orderLineItemId=1,productCode="001P",quantity=1,costPerHour=0,labourHoursPerItem=0,costperLineProduction=0,OrderId=new Order {orderId=1,ClientId="001C",orderStatus="NEW",orderStatusChangedDate=DateTime.Now,expectedOrderDate=DateTime.Now.AddMonths(1),estimatedCompletionDate=DateTime.Now.AddMonths(1),TotalOrderPrice=0}
             }
             });
 
@@ -45,4 +45,4 @@ namespace Iron_helm_order_mgt
             context.SaveChanges();
         }
     }
-}
+    }

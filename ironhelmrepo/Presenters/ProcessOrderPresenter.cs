@@ -2,7 +2,7 @@
 using Iron_helm_order_mgt;
 using Iron_helm_order_mgt.Entities;
 using Iron_helm_order_mgt.Factory;
-using Iron_helm_order_mgt.Service;
+using Iron_helm_order_mgt.DAL;
 using ironhelmrepo.Views;
 using System;
 using System.Collections.Generic;
@@ -15,43 +15,51 @@ namespace ironhelmrepo.Presenters
     public class ProcessOrderPresenter
     {
         private readonly IProcessOrderView view;
-        private OrderService orderService;
-        private CustomerService customerService;
-        private OrderLineItemService orderLineItemService;
-        private ProductService productService;
+        private OrderDAL orderDAL;
+        private Order order;
+        private CustomerDAL customerDAL;
+        private Customer customer;
+        private OrderLineItem orderLineItem;
+        private ProductCatalogDAL productCatalogDAL;
 
         public ProcessOrderPresenter(IProcessOrderView view)
         {
             this.view = view;
-            this.orderService = new OrderService();
-            this.customerService = new CustomerService();
-            this.orderLineItemService = new OrderLineItemService();
-            this.productService = new ProductService();
+            this.orderDAL = new OrderDAL();
+            order = new Order();
+            this.orderLineItem = new OrderLineItem();
+            this.productCatalogDAL = new ProductCatalogDAL();
         }
 
         public string scheduleOrder()
         {
-            return orderService.scheduleOrder(view.order.orderStatus, view.order.orderId);
+            Order order = view.order;
+            return order.validateOrderStatusChange(OrderStatus.SCHEDULED);
         }
 
         public string progressOrder()
         {
-            return orderService.progressOrder(view.order.orderStatus, view.order.orderId);
+            Order order = view.order;
+            return order.validateOrderStatusChange(OrderStatus.PROGRESSING);
         }
+        
 
         public string completeOrder()
         {
-            return orderService.completeOrder(view.order.orderStatus, view.order.orderId);
+            Order order = view.order;
+            return order.validateOrderStatusChange(OrderStatus.COMPLETED);
+            
         }
 
         public Customer getCustomerById()
         {
-            return customerService.getCustomerById(view.order.ClientId);
+            customer = new Customer(view.order.ClientId);
+            return customer.getCustomerById();
         }
 
         public List<OrderLineItem> getOrderLinesByOrderId()
         {
-            return orderLineItemService.getOrderLinesById(view.order.orderId);
+            return orderLineItem.getOrderLinesByOrderId(view.order.orderId);
         }
 
         public string initiateProduction() 
@@ -61,20 +69,20 @@ namespace ironhelmrepo.Presenters
             List<ProductCatalog> products = new List<ProductCatalog>();
             foreach (OrderLineItem l in lines)
             {
-                products.Add(productService.getProductById(l.productCode));
+                products.Add(productCatalogDAL.getProductById(l.productCode));
             }
 
             string customerSource = Enum.GetName(typeof(CustomerSource), customer.customerSource);
             if (customerSource == "STATE")
             {
                 IProductionFactory factory = new GovernmentItemProductionFactory();
-                ClientOrder storder = new ClientOrder(factory, products);
+                OrderProduction storder = new OrderProduction(factory, products,view.order);
                 return "GovernmentItemProductionFactory";
             }
             if (customerSource == "ENTERTAINMENT")
             {
                 IProductionFactory factory = new MovieItemProductionFactory();
-                ClientOrder mvorder = new ClientOrder(factory, products);
+                OrderProduction mvorder = new OrderProduction(factory, products,view.order);
                 return "MovieItemProductionFactory";
             }
             return "";

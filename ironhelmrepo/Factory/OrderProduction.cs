@@ -6,16 +6,18 @@ using System.Threading.Tasks;
 
 namespace Iron_helm_order_mgt.Factory
 {
-    public class ClientOrder
+    public class OrderProduction
     {
-        private Order order;
+
         private Packaging packaging;
         private Delivery delivery;
         private Swords swords;
         private Armour armour;
+        private Order order;
 
-        public ClientOrder(IProductionFactory factory,List<ProductCatalog> products)
+        public OrderProduction(IProductionFactory factory,List<ProductCatalog> products,Order order)
         {
+            this.order = order;
             packaging = factory.createPackaging();
             delivery = factory.createDelivery();
             foreach (ProductCatalog product in products){
@@ -50,6 +52,10 @@ namespace Iron_helm_order_mgt.Factory
         public Armour clientArmour
         {
             get { return armour; }
+        }
+        public Order clientOrder
+        {
+            get { return order; }
         }
     }
 }

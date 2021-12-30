@@ -11,5 +11,7 @@ namespace ironhelmrepo.Views
     {
         int orderId { get; set; }
         int clientId { get; set; }
+
+        string orderStatus { get; set; }
     }
 }

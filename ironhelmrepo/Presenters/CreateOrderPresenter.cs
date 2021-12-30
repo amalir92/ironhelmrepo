@@ -1,4 +1,5 @@
-﻿using Iron_helm_order_mgt.Service;
+﻿using Iron_helm_order_mgt;
+using Iron_helm_order_mgt.DAL;
 using ironhelmrepo.Views;
 using System;
 using System.Collections.Generic;
@@ -12,26 +13,26 @@ namespace ironhelmrepo.Presenters
     public class CreateOrderPresenter
     {
         private readonly ICreateOrderView view;
-        private OrderService orderService;
-        private OrderLineItemService orderLineItemService;
-        private ProductService productService;
+        private Order order;
+        private ProductCatalog productCatalog;
 
         public CreateOrderPresenter(ICreateOrderView view)
         {
             this.view = view;
-            orderService = new OrderService();
-            orderLineItemService = new OrderLineItemService();
-            productService = new ProductService();
+            productCatalog = new ProductCatalog();
         }
 
         public DataTable getAllProducts()
         {
-            return productService.getAllProducts(); ;
+           return productCatalog.getAllProducts();
         }
 
         public int createOrder()
         {
-            return orderService.createOrder(view.clientId, view.expectedOrderCompletionDate, view.orderLines);
+            order = new Order(view.orderLines, view.clientId, view.expectedOrderCompletionDate);
+            return order.createOrder();
+             
+
         }
     }
 }
