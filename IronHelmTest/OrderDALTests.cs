@@ -113,7 +113,7 @@ namespace IronHelmTest
         public void createOrder_ExceptionInsertingToDB()
         {
 
-            String clientId = "001C";
+            String clientId = "";
             DateTime expectedDate = DateTime.Now;
             List<OrderLineItem> lines = new List<OrderLineItem>();
             OrderLineItem orderLineItem = new OrderLineItem();
