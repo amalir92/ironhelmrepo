@@ -39,9 +39,9 @@ namespace Iron_helm_order_mgt.DAL
                             o.estimatedCompletionDate,
                             o.TotalOrderPrice
                             }, false);
-          // if (query.Count()>0){
+          if (query.Count()>0){
                 query.AsEnumerable().GroupBy(row => row.Field<int>("Order Id")).Select(group => group.First()).CopyToDataTable();
-          //  }
+            }
             return dt;
         }
 
@@ -124,10 +124,11 @@ namespace Iron_helm_order_mgt.DAL
                             o.estimatedCompletionDate,
                             o.TotalOrderPrice
                             }, false);
-            //if (query!=null&&query.Any())
-            //{
+
+            if (query!=null&&query.Any())
+            {
                 query?.CopyToDataTable();
-          //  }
+            }
             return dt;
         }
     }

@@ -101,11 +101,12 @@ namespace IronHelmTest
             orderLineItem.OrderId = order;
             orderLineItem.productCode = "001P";
             orderLineItem.quantity = 5;
-            orderLineItem.pricePerItem = 7;
+            orderLineItem. costPerHour= 7;
             lines.Add(orderLineItem);
-            
-            OrderDAL newOrder = new OrderDAL();
-            int ExpectedId = newOrder.createOrder(clientId, expectedDate, lines);
+            Order newOrder = new Order(lines, clientId,OrderStatus.NEW.ToString(),DateTime.Now, DateTime.Now, expectedDate,10.0,10.0,20.0);
+     
+            OrderDAL orderDAL = new OrderDAL();
+            int ExpectedId = orderDAL.createOrder(newOrder);
             Assert.AreEqual(ExpectedId, newId);
         }
 
@@ -136,18 +137,17 @@ namespace IronHelmTest
             orderLineItem.OrderId = order;
             orderLineItem.productCode = "001P";
             orderLineItem.quantity = 5;
-            orderLineItem.pricePerItem = 7;
+            orderLineItem.costPerHour = 7;
             lines.Add(orderLineItem);
-
-            OrderDAL newOrder = new OrderDAL();
-            Assert.ThrowsException<Exception>(() => newOrder.createOrder(clientId, expectedDate, lines));
+            Order newOrder = new Order(lines, null, OrderStatus.NEW.ToString(), DateTime.Now, DateTime.Now, expectedDate, 10.0, 10.0, 20.0);
+            OrderDAL orderDAL = new OrderDAL();
+            Assert.ThrowsException<Exception>(() => orderDAL.createOrder(newOrder));
         }
 
         [TestMethod]
         public void updateOrder_validData()
         {
-            DateTime estimatedDate = DateTime.Now;
-            Double cost = 120.00;
+
             IronHelmDbContext context = new IronHelmDbContext();
             int orderId = 1;
             if (context.Orders.Count() != 0)
@@ -155,7 +155,11 @@ namespace IronHelmTest
                 orderId = context.Orders.Max(table => table.orderId);
             }
             OrderDAL order = new OrderDAL();
-            order.updateOrder(orderId, estimatedDate,cost);
+            Order newOrder = new Order();
+            newOrder.orderId = orderId;
+            newOrder.estimatedCompletionDate = DateTime.Now;
+            newOrder.TotalOrderPrice = 90.0;
+            order.updateOrder(newOrder);
             DateTime actualExpectedDate = DateTime.Now;
             Double actualCost = 0;
             using (context)
@@ -165,8 +169,7 @@ namespace IronHelmTest
                 actualCost = or.TotalOrderPrice;
             }
 
-            Assert.AreEqual(estimatedDate, actualExpectedDate);
-            Assert.AreEqual(cost, actualCost);
+            Assert.AreEqual(90.0, actualCost);
         }
 
         [TestMethod]
@@ -182,8 +185,10 @@ namespace IronHelmTest
                newOrderId = orderId + 10;
 
             }
+            Order newOrder = new Order();
+            newOrder.orderId = newOrderId;
             OrderDAL order = new OrderDAL();
-            Assert.ThrowsException<Exception>(() => order.updateOrder(newOrderId, estimatedDate, cost));
+            Assert.ThrowsException<Exception>(() => order.updateOrder(newOrder));
         }
 
         [TestMethod]

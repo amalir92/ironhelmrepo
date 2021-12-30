@@ -25,7 +25,7 @@ namespace IronHelmTest
             int quantity = 10;
             var maxId = 1;
             OrderLineItemDAL orderLineItemDAL = new OrderLineItemDAL();
-            orderLineItemDAL.create_order_line(orderNo, productId, quantity);
+            orderLineItemDAL.createOrderLine(orderNo, productId, quantity,120,10.0);
             if (context.orderLineItems.Count() != 0)
             {
                 maxId = context.orderLineItems.Max(table => table.orderLineItemId);

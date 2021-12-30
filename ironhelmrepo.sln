@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ironhelmrepo", "ironhelmrepo\ironhelmrepo.csproj", "{975694CA-A913-4594-BE74-58562964AB1D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IronHelmTest", "IronHelmTest\IronHelmTest.csproj", "{798A84A2-C96A-46DB-A0BB-786C98A43865}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{975694CA-A913-4594-BE74-58562964AB1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{975694CA-A913-4594-BE74-58562964AB1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{975694CA-A913-4594-BE74-58562964AB1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{798A84A2-C96A-46DB-A0BB-786C98A43865}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{798A84A2-C96A-46DB-A0BB-786C98A43865}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{798A84A2-C96A-46DB-A0BB-786C98A43865}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{798A84A2-C96A-46DB-A0BB-786C98A43865}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

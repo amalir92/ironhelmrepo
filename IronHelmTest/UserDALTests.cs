@@ -17,7 +17,7 @@ namespace IronHelmTest
 
             UserDAL user = new UserDAL();
             DataTable dt = user.loginByUserNameAndPassword(username, password);
-            Assert.IsNull(dt);
+            Assert.IsNull(dt.DataSet);
         }
 
         [TestMethod]
@@ -28,7 +28,7 @@ namespace IronHelmTest
 
             UserDAL user = new UserDAL();
             DataTable dt = user.loginByUserNameAndPassword(username, password);
-            Assert.IsNull(dt);
+            Assert.IsNull(dt.DataSet);
         }
 
         [TestMethod]
@@ -39,7 +39,7 @@ namespace IronHelmTest
 
             UserDAL user = new UserDAL();
             DataTable dt = user.loginByUserNameAndPassword(username, password);
-            Assert.IsNull(dt);
+            Assert.IsNull(dt.DataSet);
         }
 
         [TestMethod]

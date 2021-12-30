@@ -26,16 +26,17 @@ namespace Iron_helm_order_mgt.DAL
                             o.clientId,
                             o.customerSource
                             }, false);
-          //  if (query != null && query.Any())
-          //  {
+          if (query != null && query.Any())
+          {
             query?.CopyToDataTable();
-         //   }
+           }
             return dt;
         }
 
         public Customer getCustomerById(string id)
         {
             Customer customer = context.Customers.Single(o => o.clientId == id);
+            customer.
             return customer;
         }
     }
