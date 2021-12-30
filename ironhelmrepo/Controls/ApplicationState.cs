@@ -12,7 +12,7 @@ namespace Iron_helm_order_mgt.Controls
 
         public string userId { get; set; }
 
-        public Dictionary<int,string> orderStatuses { get; set; }
+        public Dictionary<int,Order> orderStatuses { get; set; }
 
         private ApplicationState() { }
 
@@ -24,7 +24,7 @@ namespace Iron_helm_order_mgt.Controls
                 if (ApplicationState.instance == null)
                 {
                     instance = new ApplicationState();
-                    instance.orderStatuses= new Dictionary<int, string>();
+                    instance.orderStatuses= new Dictionary<int, Order>();
                 }
                 return instance;
             }

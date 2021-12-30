@@ -19,12 +19,12 @@ namespace ironhelmrepo.Presenters
         public CreateOrderPresenter(ICreateOrderView view)
         {
             this.view = view;
-            productCatalog = new ProductCatalog();
         }
 
         public DataTable getAllProducts()
         {
-           return productCatalog.getAllProducts();
+            productCatalog = new ProductCatalog();
+            return productCatalog.getAllProducts();
         }
 
         public int createOrder()

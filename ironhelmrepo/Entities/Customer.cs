@@ -35,6 +35,7 @@ namespace Iron_helm_order_mgt
         }
         public Customer (string clientId,string clientAddress,CustomerSource customerSource,string clientPhoneNumber)
         {
+            customerDAL = new CustomerDAL();
             this.clientId = clientId;
             this.clientAddress = clientAddress;
             this.customerSource = customerSource;
@@ -59,7 +60,7 @@ namespace Iron_helm_order_mgt
 
         public Customer getCustomerById()
         {
-            return customerDAL.getCustomerById(this.clientId);
+            return customerDAL.getCustomerById(this);
         }
     }
 }

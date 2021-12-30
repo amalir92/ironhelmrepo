@@ -34,7 +34,7 @@ namespace Iron_helm_order_mgt
 
         public DataTable getUserByLoginId()
         {
-            DataTable dt = userDal.loginByUserNameAndPassword(this.userId, this.password);
+            DataTable dt = userDal.loginByUserNameAndPassword(this);
             return dt;
         }
 

@@ -12,32 +12,29 @@ namespace ironhelmrepo.Presenters
 {
     public class ClientPortalPresenter
     {
-        private readonly IClientPortalView portalview;
+        private readonly IPortalView portalview;
         private Order order;
-        private OrderDAL orderDAL;
-        private OrderLineItemDAL orderLineItemDAL;
 
-        public ClientPortalPresenter(IClientPortalView portalview)
+        public ClientPortalPresenter(IPortalView portalview)
         {
-            this.portalview = portalview;
-            order = new Order();
-            orderDAL = new OrderDAL();
-            orderLineItemDAL = new OrderLineItemDAL();
-
+            this.portalview = portalview;           
         }
         public DataTable DisplayClientOrderData()
         {
-            return order.getCustomerOrdersById(portalview.clientId);
+            order = new Order(portalview.clientId);
+            return order.getCustomerOrdersById();
         }
 
         public string AcceptOrder()
         {
-            Order order = orderDAL.getOrderById(portalview.orderId);
+            Order order = new Order(portalview.orderId, portalview.clientId);
+            order=order.getOrderById();
             return order.validateOrderStatusChange(OrderStatus.ACCEPTED);
         }
         public string CancelOrder()
         {
-            Order order = orderDAL.getOrderById(portalview.orderId);
+            Order order = new Order(portalview.orderId, portalview.clientId);
+            order = order.getOrderById();
             return order.validateOrderStatusChange(OrderStatus.CANCELLED);
         }
 

@@ -17,14 +17,14 @@ namespace Iron_helm_order_mgt.DAL
             this.context = new IronHelmDbContext();
         }
 
-        public DataTable loginByUserNameAndPassword(string username, string password)
+        public DataTable loginByUserNameAndPassword(User user_)
         {
             DataTable dt = new DataTable();
             dt.Columns.Add("userId", typeof(string));
             dt.Columns.Add("userType", typeof(string));
             var query = from user in context.Users.AsEnumerable()
-                        where user.userId == username 
-                        && user.password==password 
+                        where user.userId == user_.userId
+                        && user.password== user_.password
                         select dt.LoadDataRow(new object[] {
                             user.userId,
                             user.userType

@@ -33,10 +33,9 @@ namespace Iron_helm_order_mgt.DAL
             return dt;
         }
 
-        public Customer getCustomerById(string id)
+        public Customer getCustomerById(Customer c)
         {
-            Customer customer = context.Customers.Single(o => o.clientId == id);
-            customer.
+            Customer customer = context.Customers.Single(o => o.clientId == c.clientId);
             return customer;
         }
     }

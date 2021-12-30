@@ -13,18 +13,16 @@ namespace ironhelmrepo.Presenters
     public class ClientDetailsPresenter
     {
         private readonly ICustomerDetailsView view;
-        private CustomerDAL customerDAL;
         private Customer customer;
 
         public ClientDetailsPresenter(ICustomerDetailsView view)
         {
             this.view = view;
-            customerDAL = new CustomerDAL();
-            customer = new Customer(view.clientId);
         }
 
         public DataTable getCustomerDetailsById()
         {
+            customer = new Customer(view.clientId);
             return customer.getCustomerDetailsById();
         }
     }
