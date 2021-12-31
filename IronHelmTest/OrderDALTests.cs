@@ -32,46 +32,51 @@ namespace IronHelmTest
         [TestMethod]
         public void getOrderById_NoData()
         {
-            int orderId = 1111;
-            OrderDAL order = new OrderDAL();
-            Order ord = order.getOrderById(orderId);
+            Order ord = new Order();
+            ord.orderId = 1111;
+            OrderDAL orderDAL = new OrderDAL();
+            Order order = orderDAL.getOrderById(ord);
             Assert.IsNull(ord);
         }
 
         [TestMethod]
         public void getOrderById_ValidData()
         {
-            int orderId = 1;
-            OrderDAL order = new OrderDAL();
-            Order ord = order.getOrderById(orderId);
+            Order ord = new Order();
+            ord.orderId = 1;
+            OrderDAL orderDAL = new OrderDAL();
+            Order order = orderDAL.getOrderById(ord);
             Assert.IsNotNull(ord);
         }
 
         [TestMethod]
         public void setOrderStatus_validData()
         {
-            int orderId = 1;
-            OrderStatus status = OrderStatus.NEW;
+            Order ord = new Order();
+            ord.orderId = 1;
+            ord.orderStatus = OrderStatus.NEW.ToString();
             String expectedOrderStatus = "";
             OrderDAL order = new OrderDAL();
-            order.setOrderStatus(orderId, status);
+            order.setOrderStatus(ord);
 
             using (var context = new IronHelmDbContext())
             {
-                Order or = context.Orders.Single(o => o.orderId == orderId);
+                Order or = context.Orders.Single(o => o.orderId == 1);
                 expectedOrderStatus = or.orderStatus;
             }
-            Assert.AreEqual(expectedOrderStatus, status);
+            Assert.AreEqual(expectedOrderStatus, OrderStatus.NEW.ToString());
         }
 
         [TestMethod]
         public void setOrderStatus_invalidData()
         {
-            int orderId = 1111;
-            OrderStatus status = OrderStatus.NEW;
+            Order ord = new Order();
+            ord.orderId = 111;
+            ord.orderStatus = OrderStatus.NEW.ToString();
+            
             OrderDAL order = new OrderDAL();
             
-            Assert.ThrowsException<Exception>(() => order.setOrderStatus(orderId, status));
+            Assert.ThrowsException<Exception>(() => order.setOrderStatus(ord));
         }
 
         [TestMethod]

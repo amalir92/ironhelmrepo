@@ -31,7 +31,7 @@ namespace IronHelmTest
         [TestMethod]
         public void getCustomerDetailsById_validCustomerId()
         {
-            String custoerId = "001";
+            String custoerId = "001C";
             DataTable  dt = null;
             dt = customerDAL.getCustomerDetailsById(custoerId);
             Assert.IsTrue(dt.Rows.Count>=1);
@@ -59,8 +59,11 @@ namespace IronHelmTest
         public void getCustomerById_validCustomerId()
         {
             String custoerId = "001C";
-            Customer customer = customerDAL.getCustomerById(custoerId);
+            Customer c = new Customer();
+            c.clientId = custoerId;
+            Customer customer = customerDAL.getCustomerById(c);
             Assert.IsNotNull(customer);
         }
     }
 }
+

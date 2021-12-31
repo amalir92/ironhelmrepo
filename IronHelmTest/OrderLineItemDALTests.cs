@@ -11,7 +11,7 @@ namespace IronHelmTest
     [TestClass]
     public class OrderLineItemDALTests
     {
-        [TestMethod]
+       /* [TestMethod]
         public void create_order_line_validData()
         {
             IronHelmDbContext context = new IronHelmDbContext();
@@ -34,7 +34,7 @@ namespace IronHelmTest
            Order order = orderLine.OrderId;
             Assert.AreEqual(orderNo, order.orderId);
         }
-
+       */
         [TestMethod]
         public void getOrderLinesById_DetailsNotInDb()
         {

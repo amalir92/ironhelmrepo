@@ -2,7 +2,7 @@
 using System;
 using Iron_helm_order_mgt.DAL;
 using System.Data;
-
+using Iron_helm_order_mgt;
 
 namespace IronHelmTest
 {
@@ -14,9 +14,11 @@ namespace IronHelmTest
         {
             String username = "";
             String password = "";
-
-            UserDAL user = new UserDAL();
-            DataTable dt = user.loginByUserNameAndPassword(username, password);
+            User user = new User();
+            user.userId = username;
+            user.password = password ;
+            UserDAL userDAL = new UserDAL();
+            DataTable dt = userDAL.loginByUserNameAndPassword(user);
             Assert.IsNull(dt.DataSet);
         }
 
@@ -25,9 +27,11 @@ namespace IronHelmTest
         {
             String username = "User1";
             String password = "1234";
-
-            UserDAL user = new UserDAL();
-            DataTable dt = user.loginByUserNameAndPassword(username, password);
+            User user = new User();
+            user.userId = username;
+            user.password = password;
+            UserDAL userDAL = new UserDAL();
+            DataTable dt = userDAL.loginByUserNameAndPassword(user);
             Assert.IsNull(dt.DataSet);
         }
 
@@ -36,9 +40,11 @@ namespace IronHelmTest
         {
             String username = "001C";
             String password = "pass1";
-
-            UserDAL user = new UserDAL();
-            DataTable dt = user.loginByUserNameAndPassword(username, password);
+            User user = new User();
+            user.userId = username;
+            user.password = password;
+            UserDAL userDAL = new UserDAL();
+            DataTable dt = userDAL.loginByUserNameAndPassword(user);
             Assert.IsNull(dt.DataSet);
         }
 
@@ -47,9 +53,11 @@ namespace IronHelmTest
         {
             String username = "001C";
             String password = "1234";
-
-            UserDAL user = new UserDAL();
-            DataTable dt = user.loginByUserNameAndPassword(username, password);
+            User user = new User();
+            user.userId = username;
+            user.password = password;
+            UserDAL userDAL = new UserDAL();
+            DataTable dt = userDAL.loginByUserNameAndPassword(user);
             Assert.IsNotNull(dt);
         }
     }
