@@ -9,51 +9,55 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ironhelmrepo.IModels;
 
 namespace ironhelmrepo.Presenters
 {
     public class ProcessOrderPresenter
     {
         private readonly IProcessOrderView view;
-        private Order order;
-        private Customer customer;
-        private OrderLineItem orderLineItem;
+        private IOrder order;
+        private ICustomer customer;
+        private IOrderLineItem orderLineItem;
 
-        public ProcessOrderPresenter(IProcessOrderView view)
+        public ProcessOrderPresenter(IProcessOrderView view,IOrder order,ICustomer customer,IOrderLineItem orderLineItem)
         {
             this.view = view;
+            this.order = order;
+            this.customer = customer;
+            this.orderLineItem = orderLineItem;
         }
 
         public string scheduleOrder()
         {
-            Order order = view.order;
+            order = view.order;
             return order.validateOrderStatusChange(OrderStatus.SCHEDULED);
         }
 
         public string progressOrder()
         {
-            Order order = view.order;
+            order = view.order;
             return order.validateOrderStatusChange(OrderStatus.PROGRESSING);
         }
         
 
         public string completeOrder()
         {
-            Order order = view.order;
+            order = view.order;
             return order.validateOrderStatusChange(OrderStatus.COMPLETED);
             
         }
 
         public Customer getCustomerById()
         {
-            customer = new Customer(view.order.ClientId);
-            return customer.getCustomerById();
+            //customer = new Customer(view.order.clientId);
+            return customer.getCustomerById(view.order.clientId);
         }
 
         public List<OrderLineItem> getOrderLinesByOrderId()
         {
-            this.orderLineItem = new OrderLineItem(view.order);
-            return orderLineItem.getOrderLinesByOrderId();
+           // this.orderLineItem = new OrderLineItem(view.order);
+            return orderLineItem.getOrderLinesByOrderId(view.order.orderId,view.order.clientId);
         }
 
         public string initiateProduction() 
@@ -71,13 +75,13 @@ namespace ironhelmrepo.Presenters
             if (customerSource == "STATE")
             {
                 IProductionFactory factory = new GovernmentItemProductionFactory();
-                OrderProduction storder = new OrderProduction(factory, products,view.order);
+                OrderProduction storder = new OrderProduction(factory, products);
                 return "GovernmentItemProductionFactory";
             }
             if (customerSource == "ENTERTAINMENT")
             {
                 IProductionFactory factory = new MovieItemProductionFactory();
-                OrderProduction mvorder = new OrderProduction(factory, products,view.order);
+                OrderProduction mvorder = new OrderProduction(factory, products);
                 return "MovieItemProductionFactory";
             }
             return "";

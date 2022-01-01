@@ -1,4 +1,5 @@
-﻿using ironhelmrepo.Presenters;
+﻿using ironhelmrepo.IModels;
+using ironhelmrepo.Presenters;
 using ironhelmrepo.Views;
 using System;
 using System.Collections.Generic;
@@ -13,24 +14,25 @@ namespace Iron_helm_order_mgt.Forms
     public partial class Estimate_Order_Form : Form,IEstimateOrderView
     {
         private EstimateOrderPresenter presenter = null;
-        private Order order;
+        private IOrder iorder;
+        private IOrderLineItem orderLineItem;
         DataTable dt;
 
         public int orderId
         {
-            get { return order.orderId; }
+            get { return iorder.orderId; }
             set { }
         }
 
         public string clientId
         {
-            get { return order.ClientId; }
+            get { return iorder.clientId; }
             set { }
         }
         public string orderStatus
         {
-            get { return order.orderStatus; }
-            set { order.orderStatus = value; }
+            get { return iorder.orderStatus; }
+            set { iorder.orderStatus = value; }
         }
         public DateTime estimatedDate
         {
@@ -79,9 +81,10 @@ namespace Iron_helm_order_mgt.Forms
         public Estimate_Order_Form(Order order)
         {
             InitializeComponent();
-            this.order = order;
+            this.iorder = order;
+            orderLineItem = new OrderLineItem(order);
             dt = new DataTable();
-            presenter = new EstimateOrderPresenter(this);
+            presenter = new EstimateOrderPresenter(this,iorder,orderLineItem);
         }
 
         private void Estimate_Order_Form_Load(object sender, EventArgs e)

@@ -15,7 +15,7 @@ namespace Iron_helm_order_mgt.Factory
         private Armour armour;
         private Order order;
 
-        public OrderProduction(IProductionFactory factory,List<ProductCatalog> products,Order order)
+        public OrderProduction(IProductionFactory factory,List<ProductCatalog> products)
         {
             this.order = order;
             packaging = factory.createPackaging();

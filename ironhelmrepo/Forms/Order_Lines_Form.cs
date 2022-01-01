@@ -1,4 +1,5 @@
-﻿using ironhelmrepo.Presenters;
+﻿using ironhelmrepo.IModels;
+using ironhelmrepo.Presenters;
 using ironhelmrepo.Views;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace Iron_helm_order_mgt.Forms
     {
 
         private OrderLinesPresenter presenter=null;
+        private IOrderLineItem orderLineItem;
         int orderId_ = 0;
         string clientId_;
         public Order_Lines_Form(int orderId,string clientId)
@@ -23,7 +25,8 @@ namespace Iron_helm_order_mgt.Forms
             InitializeComponent();
             this.orderId_ = orderId;
             this.clientId_ = clientId;
-            presenter = new OrderLinesPresenter(this);
+            orderLineItem = new OrderLineItem(new Order(orderId, clientId));
+            presenter = new OrderLinesPresenter(this,orderLineItem);
         }
 
         public int orderId 

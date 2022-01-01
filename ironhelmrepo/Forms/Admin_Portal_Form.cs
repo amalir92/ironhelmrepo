@@ -1,5 +1,6 @@
 ﻿using Iron_helm_order_mgt.Controls;
 using Iron_helm_order_mgt.Forms;
+using ironhelmrepo.IModels;
 using ironhelmrepo.Presenters;
 using ironhelmrepo.Views;
 using System;
@@ -18,6 +19,7 @@ namespace Iron_helm_order_mgt
     {
 
         private AdminPortalPresenter presenter = null;
+        private IOrder order;
         private ApplicationState state = null;
 
         public int orderId
@@ -41,7 +43,8 @@ namespace Iron_helm_order_mgt
         public Admin_Portal_Frm()
         {
             InitializeComponent();
-            presenter = new AdminPortalPresenter(this);
+            order = new Order();
+            presenter = new AdminPortalPresenter(this,order);
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)

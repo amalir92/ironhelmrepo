@@ -1,5 +1,6 @@
 ﻿using Iron_helm_order_mgt;
 using Iron_helm_order_mgt.DAL;
+using ironhelmrepo.IModels;
 using ironhelmrepo.Views;
 using System;
 using System.Collections.Generic;
@@ -12,22 +13,24 @@ namespace ironhelmrepo.Presenters
     public class EstimateOrderPresenter
     {
         private readonly IEstimateOrderView view;
-        private Order order;
-        private OrderLineItem orderLineItem;
-        public EstimateOrderPresenter(IEstimateOrderView view)
+        private IOrder order;
+        private IOrderLineItem orderLineItem;
+        public EstimateOrderPresenter(IEstimateOrderView view,IOrder order,IOrderLineItem orderLineItem)
         {
             this.view = view;
+            this.order = order;
+            this.orderLineItem = orderLineItem;
         }
         public List<OrderLineItem> getOrderLines()
         {
-            orderLineItem = new OrderLineItem(new Order(view.orderId,view.clientId));
-            return orderLineItem.getOrderLinesByOrderId();
+            
+            return orderLineItem.getOrderLinesByOrderId(view.orderId, view.clientId);
         }
 
         public string estimateOrder()
         {
-            order = new Order(view.orderId,view.clientId);
-            order = order.getOrderById();
+            //order = new Order(view.orderId,view.clientId);
+            order = order.getOrderById(view.orderId, view.clientId);
             return order.validateOrderStatusChange(OrderStatus.ESTIMATED);
         }
 
@@ -49,15 +52,9 @@ namespace ironhelmrepo.Presenters
 
         public void updateOrder()
         {
-            order = new Order(view.orderId, view.clientId);
-            order = order.getOrderById();
-            order.packageCost = view.packageCost;
-            order.deliveryCost = view.deliveryCost;
+            order = order.getOrderById(view.orderId, view.clientId);
             List<OrderLineItem> orderlines = getOrderLines();
-            order.OrderLineItems = orderlines;
-            order.TotalOrderPrice= order.calculateTotalCost();
-            order.orderStatus = "ESTIMATED";
-            order.updateOrder(order);
+            order.updateOrder(view.packageCost, view.deliveryCost, orderlines, order.calculateTotalCost(orderlines),"ESTIMATED",view.estimatedDate);
             
         }
 

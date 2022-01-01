@@ -1,4 +1,5 @@
 ﻿using Iron_helm_order_mgt.DAL;
+using ironhelmrepo.IModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Iron_helm_order_mgt
 {
-    public class ProductCatalog
+    public class ProductCatalog: IProduct
     {
         private ProductCatalogDAL productCatalogDAL;
         public ProductCatalog()

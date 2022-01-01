@@ -1,5 +1,6 @@
 ﻿using Iron_helm_order_mgt.DAL;
 using Iron_helm_order_mgt.Entities;
+using ironhelmrepo.IModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Iron_helm_order_mgt
 {
-   public  class Customer
+   public  class Customer:ICustomer
     {
         private CustomerDAL customerDAL;
         [Key]
@@ -53,13 +54,15 @@ namespace Iron_helm_order_mgt
             this.clientPhoneNumber = customer.clientPhoneNumber;
         }
 
-        public DataTable getCustomerDetailsById()
+        public DataTable getCustomerDetailsById(string clientId)
         {
+            this.clientId = clientId;
             return customerDAL.getCustomerDetailsById(this.clientId);
         }
 
-        public Customer getCustomerById()
+        public Customer getCustomerById(string clientId)
         {
+            this.clientId = clientId;
             return customerDAL.getCustomerById(this);
         }
     }

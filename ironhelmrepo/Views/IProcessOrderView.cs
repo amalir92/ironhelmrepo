@@ -1,4 +1,5 @@
 ﻿using Iron_helm_order_mgt;
+using ironhelmrepo.IModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace ironhelmrepo.Views
 {
     public interface IProcessOrderView
     {
-        Order order { get; set; }
+        IOrder order { get; set; }
     }
 }

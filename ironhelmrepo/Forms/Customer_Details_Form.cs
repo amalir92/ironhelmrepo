@@ -1,4 +1,5 @@
-﻿using ironhelmrepo.Presenters;
+﻿using ironhelmrepo.IModels;
+using ironhelmrepo.Presenters;
 using ironhelmrepo.Views;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace Iron_helm_order_mgt.Forms
     {
         private String clientId;
         private ClientDetailsPresenter presenter = null;
-
+        private ICustomer customer;
         string ICustomerDetailsView.clientId
         {
             get { return this.clientId; }
@@ -26,7 +27,8 @@ namespace Iron_helm_order_mgt.Forms
         {
             InitializeComponent();
             this.clientId = clientId;
-            presenter = new ClientDetailsPresenter(this);
+            this.customer = new Customer(clientId);
+            presenter = new ClientDetailsPresenter(this,customer);
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)

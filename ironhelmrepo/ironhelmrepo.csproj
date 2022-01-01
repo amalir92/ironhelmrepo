@@ -167,6 +167,10 @@
     <Compile Include="Forms\Schedule_Order_Form.Designer.cs">
       <DependentUpon>Schedule_Order_Form.cs</DependentUpon>
     </Compile>
+    <Compile Include="IModels\ICustomer.cs" />
+    <Compile Include="IModels\IOrder.cs" />
+    <Compile Include="IModels\IOrderLineItem.cs" />
+    <Compile Include="IModels\IProduct.cs" />
     <Compile Include="IModels\IUser.cs" />
     <Compile Include="IronHelmDbContext.cs" />
     <Compile Include="IronHelmDBContextInitializer.cs" />

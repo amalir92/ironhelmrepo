@@ -29,7 +29,7 @@ namespace Iron_helm_order_mgt.DAL
             dt.Columns.Add("Estimated Order Completion Date", typeof(DateTime));
             dt.Columns.Add("Total Cost", typeof(Double));
             var query = from o in context.Orders.AsEnumerable()
-                        where o.ClientId == clientId
+                        where o.clientId == clientId
                         orderby o.orderStatusChangedDate descending
                         select dt.LoadDataRow(new object[] {
                             o.orderId,
@@ -117,7 +117,7 @@ namespace Iron_helm_order_mgt.DAL
                         orderby o.orderStatusChangedDate descending
                         select dt.LoadDataRow(new object[] {
                             o.orderId,
-                            o.ClientId,
+                            o.clientId,
                             o.orderStatus,
                             o.orderStatusChangedDate,
                             o.expectedOrderDate,

@@ -1,4 +1,5 @@
 ﻿using Iron_helm_order_mgt.DAL;
+using ironhelmrepo.IModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Iron_helm_order_mgt
 {
-    public class OrderLineItem
+    public class OrderLineItem: IOrderLineItem
     {
         private OrderLineItemDAL orderLineItemDAL;
         public OrderLineItem()
@@ -65,13 +66,17 @@ namespace Iron_helm_order_mgt
             return costperLineProduction;
         }
 
-        public List<OrderLineItem> getOrderLinesByOrderId()
+        public List<OrderLineItem> getOrderLinesByOrderId(int orderId,string clientId)
         {
-            return orderLineItemDAL.getOrderLinesById(this.OrderId.orderId);
+            this.OrderId.orderId = orderId;
+            this.OrderId.clientId = clientId;
+            return orderLineItemDAL.getOrderLinesById(orderId);
         }
-        public DataTable getOrderLinesTableByOrderId()
+        public DataTable getOrderLinesTableByOrderId(int orderId, string clientId)
         {
-            return orderLineItemDAL.getOrderLinesByOrderId(this.OrderId.orderId);
+            this.OrderId.orderId = orderId;
+            this.OrderId.clientId = clientId;
+            return orderLineItemDAL.getOrderLinesByOrderId(orderId);
         }
 
         public void updateOrderLine()

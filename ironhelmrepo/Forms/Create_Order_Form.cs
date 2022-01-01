@@ -1,4 +1,5 @@
 ﻿using Iron_helm_order_mgt.Controls;
+using ironhelmrepo.IModels;
 using ironhelmrepo.Presenters;
 using ironhelmrepo.Views;
 using System;
@@ -18,6 +19,8 @@ namespace Iron_helm_order_mgt
     {
         String clientId;
         private CreateOrderPresenter presenter = null;
+        private IOrder order;
+        private IProduct product;
         DataTable dt = new DataTable();
 
         List<OrderLineItem> lines = new List<OrderLineItem>();
@@ -53,7 +56,9 @@ namespace Iron_helm_order_mgt
         {
             InitializeComponent();
             this.clientId = clientId;
-            presenter = new CreateOrderPresenter(this);
+            order = new Order(clientId);
+            product = new ProductCatalog();
+            presenter = new CreateOrderPresenter(this,order,product);
         }
 
         private void Create_Order_Form_Load(object sender, EventArgs e)

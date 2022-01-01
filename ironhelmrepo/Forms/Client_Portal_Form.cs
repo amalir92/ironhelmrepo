@@ -1,5 +1,6 @@
 ﻿using Iron_helm_order_mgt.Controls;
 using Iron_helm_order_mgt.Forms;
+using ironhelmrepo.IModels;
 using ironhelmrepo.Presenters;
 using ironhelmrepo.Views;
 using System;
@@ -20,6 +21,7 @@ namespace Iron_helm_order_mgt
         String username;
         private ClientPortalPresenter presenter = null;
         private ApplicationState state = null;
+        private IOrder order;
         public string clientId
         {
             get { return username; }
@@ -40,8 +42,8 @@ namespace Iron_helm_order_mgt
         {
             InitializeComponent();
             this.username = clientId;
-
-            presenter = new ClientPortalPresenter(this);
+            order = new Order(clientId);
+            presenter = new ClientPortalPresenter(this,order);
             
         }
 

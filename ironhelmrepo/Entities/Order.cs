@@ -1,5 +1,6 @@
 ﻿using Iron_helm_order_mgt.Controls;
 using Iron_helm_order_mgt.DAL;
+using ironhelmrepo.IModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Iron_helm_order_mgt
 {
-    public class Order
+    public class Order: IOrder
     {
         private OrderDAL dal;
         private ApplicationState state = null;
@@ -23,7 +24,7 @@ namespace Iron_helm_order_mgt
         public ICollection<OrderLineItem> OrderLineItems { get; set; }
 
         [Required]
-        public String ClientId { get; set; }
+        public String clientId { get; set; }
 
         public String orderStatus { get; set; }
 
@@ -45,13 +46,13 @@ namespace Iron_helm_order_mgt
         public Order(string clientId)
         {
             dal = new OrderDAL();
-            ClientId = clientId;
+            clientId = clientId;
         }
         public Order(int orderId, string clientId)
         {
             dal = new OrderDAL();
             this.orderId = orderId;
-            ClientId = clientId;
+            clientId = clientId;
         }
 
         public Order(int orderId, ICollection<OrderLineItem> orderLineItems, string clientId, string orderStatus, DateTime orderStatusChangedDate, DateTime estimatedCompletionDate, DateTime expectedOrderDate, double packageCost, double deliveryCost, double totalOrderPrice)
@@ -59,7 +60,7 @@ namespace Iron_helm_order_mgt
             dal = new OrderDAL();
             this.orderId = orderId;
             this.OrderLineItems = orderLineItems;
-            this.ClientId = clientId;
+            this.clientId = clientId;
             this.orderStatus = orderStatus;
             this.orderStatusChangedDate = orderStatusChangedDate;
             this.estimatedCompletionDate = estimatedCompletionDate;
@@ -73,7 +74,7 @@ namespace Iron_helm_order_mgt
         {
             dal = new OrderDAL();
             this.orderId = orderId;
-            this.ClientId = clientId;
+            this.clientId = clientId;
             this.orderStatus = orderStatus;
             this.orderStatusChangedDate = orderStatusChangedDate;
             this.estimatedCompletionDate = estimatedCompletionDate;
@@ -86,7 +87,7 @@ namespace Iron_helm_order_mgt
         {
             dal = new OrderDAL();
             this.OrderLineItems = lines;
-            this.ClientId = clientId;
+            this.clientId = clientId;
             this.orderStatus = orderStatus;
             this.orderStatusChangedDate = orderStatusChangedDate;
             this.estimatedCompletionDate = estimatedCompletionDate;
@@ -103,13 +104,16 @@ namespace Iron_helm_order_mgt
         public Order(List<OrderLineItem> lines, string clientId, DateTime expectedDate)
         {
             this.OrderLineItems = lines;
-            this.ClientId = clientId;
+            this.clientId = clientId;
             this.expectedOrderDate = expectedDate;
             dal = new OrderDAL();
         }
 
-        public int createOrder()
+        public int createOrder(List<OrderLineItem> lines, string clientId, DateTime expectedDate)
         {
+            this.OrderLineItems = lines;
+            this.clientId = clientId;
+            this.expectedOrderDate = expectedDate;
             this.orderStatus = "NEW";
             this.orderStatusChangedDate = DateTime.Now;
             this.estimatedCompletionDate = DateTime.Now;
@@ -119,22 +123,25 @@ namespace Iron_helm_order_mgt
             return orderId;
         }
 
-        public void updateOrder(Order order)
+        public void updateOrder(double packageCost, double deliveryCost, List<OrderLineItem> lines, double totalCost, string status,DateTime estimatedCompletionDate)
         {
-            this.orderStatus = order.orderStatus;
-            this.orderStatusChangedDate = order.orderStatusChangedDate;
-            this.estimatedCompletionDate = order.estimatedCompletionDate;
-            this.TotalOrderPrice = order.TotalOrderPrice;
-            dal.updateOrder(order);
+            this.packageCost = packageCost;
+            this.deliveryCost = deliveryCost;
+            this.OrderLineItems = lines;
+            this.orderStatus = status;
+            this.orderStatusChangedDate = DateTime.Now;
+            this.estimatedCompletionDate = estimatedCompletionDate;
+            this.TotalOrderPrice = totalCost;
+            dal.updateOrder(this);
             this.state = ApplicationState.getState();
             state.orderStatuses[this.orderId]=this;
 
         }
 
-        public double calculateTotalCost()
+        public double calculateTotalCost(List<OrderLineItem> lines)
         {
             double tcost = 0;
-            List<OrderLineItem> lines = this.OrderLineItems.ToList();
+            //List<OrderLineItem> lines = this.OrderLineItems.ToList();
             foreach (OrderLineItem item in lines)
             {
                 tcost = tcost + item.calculateCostPerItemProduction();
@@ -240,9 +247,9 @@ namespace Iron_helm_order_mgt
             return "";
         }
 
-        public DataTable getCustomerOrdersById()
+        public DataTable getCustomerOrdersById(string clientId)
         {
-            DataTable dt = dal.getCustomerById(this.ClientId);
+            DataTable dt = dal.getCustomerById(clientId);
             return dt;
         }
 
@@ -252,8 +259,10 @@ namespace Iron_helm_order_mgt
             return dt;
         }
 
-        public Order getOrderById()
+        public Order getOrderById(int orderId, string clientId)
         {
+            this.orderId = orderId;
+            this.clientId = clientId;
             return dal.getOrderById(this);
         }
     }
