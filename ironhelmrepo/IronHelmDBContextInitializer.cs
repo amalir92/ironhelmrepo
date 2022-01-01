@@ -1,10 +1,11 @@
-﻿using Iron_helm_order_mgt.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Iron_helm_order_mgt.Entities;
+using ironhelmrepo.Controls;
 
 namespace Iron_helm_order_mgt
 {
@@ -13,12 +14,14 @@ namespace Iron_helm_order_mgt
         protected override void Seed(IronHelmDbContext context)
         {
             base.Seed(context);
+            EncryptDecrypt crypto = EncryptDecrypt.Instance;
+
             context.Users.AddRange(new[]
             {
-                new User {userId="001C",userType="Client",password="1234"},
-                new User {userId="002C",userType="Client",password="1234"},
-                new User {userId="003C",userType="Client",password="1234"},
-                new User {userId="001A", userType="Admin", password="1234"}
+                new User {userId="001C",userType="Client",password=crypto.EncryptText("1234")},
+                new User {userId="002C",userType="Client",password=crypto.EncryptText("1234")},
+                new User {userId="003C",userType="Client",password=crypto.EncryptText("1234")},
+                new User {userId="001A", userType="Admin", password=crypto.EncryptText("1234")}
             });
 
             context.ProductCatalogs.AddRange(new[]

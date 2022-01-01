@@ -81,6 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\ApplicationState.cs" />
+    <Compile Include="Controls\EncryptDecrypt.cs" />
     <Compile Include="DAL\CustomerDAL.cs" />
     <Compile Include="DAL\OrderDAL.cs" />
     <Compile Include="DAL\OrderLineItemDAL.cs" />
@@ -166,6 +167,7 @@
     <Compile Include="Forms\Schedule_Order_Form.Designer.cs">
       <DependentUpon>Schedule_Order_Form.cs</DependentUpon>
     </Compile>
+    <Compile Include="IModels\IUser.cs" />
     <Compile Include="IronHelmDbContext.cs" />
     <Compile Include="IronHelmDBContextInitializer.cs" />
     <Compile Include="Presenters\AdminPortalPresenter.cs" />
@@ -221,7 +223,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <None Include="ClassDiagram1.cd" />
     <None Include="ironhelm.cd" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />

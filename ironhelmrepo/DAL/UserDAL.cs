@@ -6,9 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Iron_helm_order_mgt.Entities;
 
+
 namespace Iron_helm_order_mgt.DAL
 {
-    public class UserDAL
+    public class UserDAL 
     {
         IronHelmDbContext context;
 
@@ -17,14 +18,14 @@ namespace Iron_helm_order_mgt.DAL
             this.context = new IronHelmDbContext();
         }
 
-        public DataTable loginByUserNameAndPassword(User user_)
+        public DataTable loginByUserNameAndPassword(string username,string password)
         {
             DataTable dt = new DataTable();
             dt.Columns.Add("userId", typeof(string));
             dt.Columns.Add("userType", typeof(string));
             var query = from user in context.Users.AsEnumerable()
-                        where user.userId == user_.userId
-                        && user.password== user_.password
+                        where user.userId == username
+                        && user.password== password
                         select dt.LoadDataRow(new object[] {
                             user.userId,
                             user.userType

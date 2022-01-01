@@ -1,4 +1,6 @@
 ﻿using Iron_helm_order_mgt.Controls;
+using Iron_helm_order_mgt.DAL;
+using ironhelmrepo.IModels;
 using ironhelmrepo.Presenters;
 using ironhelmrepo.Views;
 using System;
@@ -17,7 +19,7 @@ namespace Iron_helm_order_mgt
     public partial class Login_frm : Form, ILoginView
     {
         private LoginPresenter presenter = null;
-
+        private IUser user;
 
         string ILoginView.username { get { return username.Text; } set { } }
         string ILoginView.password { get { return password.Text; } set { } }
@@ -26,7 +28,8 @@ namespace Iron_helm_order_mgt
         {
             InitializeComponent();
             password.PasswordChar = '*';
-            presenter = new LoginPresenter(this);
+            user = new User(username.Text, password.Text);
+            presenter = new LoginPresenter(this,user);
             getStateInfo();
         }
 

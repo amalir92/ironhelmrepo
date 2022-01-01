@@ -1,4 +1,6 @@
 ﻿using Iron_helm_order_mgt.DAL;
+using ironhelmrepo.Controls;
+using ironhelmrepo.IModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -10,19 +12,18 @@ using System.Threading.Tasks;
 
 namespace Iron_helm_order_mgt
 {
-    public class User
+    public class User : IUser
     {
         private UserDAL userDal;
+        EncryptDecrypt crypto = null;
         public User() {
-  
+            crypto = EncryptDecrypt.Instance;
         }
 
-        
-        public User(string userId, string password)
+        public User(string username,string password)
         {
-            this.userId = userId;
-            this.password = password;
-            userDal = new UserDAL();
+            this.userDal = new UserDAL();
+            crypto = EncryptDecrypt.Instance;
         }
 
         [Key]
@@ -32,10 +33,17 @@ namespace Iron_helm_order_mgt
 
         public String password { get; set; }
 
-        public DataTable getUserByLoginId()
+        public DataTable getUserByLoginId(string username,string password)
         {
-            DataTable dt = userDal.loginByUserNameAndPassword(this);
+            password = encryptPassword(password);
+            Console.WriteLine(password);
+            DataTable dt = this.userDal.loginByUserNameAndPassword(username, password);
             return dt;
+        }
+
+        public string encryptPassword(string password)
+        {
+            return this.crypto.EncryptText(password);
         }
 
     }
