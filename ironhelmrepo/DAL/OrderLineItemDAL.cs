@@ -32,7 +32,7 @@ namespace Iron_helm_order_mgt.DAL
                 dt.Columns.Add("Quantity", typeof(int));
                 using (var context = new IronHelmDbContext())
                 {
-                    var query = from o in context.orderLineItems.AsEnumerable()
+                    var query = from o in context.orderLineItems.AsEnumerable().ToList()
                                 where o.OrderId.orderId == orderId
                                 orderby o.orderLineItemId descending
                                 select dt.LoadDataRow(new object[] {
