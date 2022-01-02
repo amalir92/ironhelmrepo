@@ -1,4 +1,6 @@
-﻿using Iron_helm_order_mgt.Forms;
+﻿using Iron_helm_order_mgt.Controls;
+using Iron_helm_order_mgt.Forms;
+using ironhelmrepo.IModels;
 using ironhelmrepo.Presenters;
 using ironhelmrepo.Views;
 using System;
@@ -14,15 +16,16 @@ using System.Windows.Forms;
 
 namespace Iron_helm_order_mgt
 {
-    public partial class ClientPortal_Frm : Form, IClientPortalView
+    public partial class ClientPortal_Frm : Form, IPortalView
     {
         String username;
         private ClientPortalPresenter presenter = null;
-
+        private ApplicationState state = null;
+        private IOrder order;
         public string clientId
         {
             get { return username; }
-            set { }
+            set { username = value; }
         }
         public string orderStatus
         {
@@ -39,8 +42,8 @@ namespace Iron_helm_order_mgt
         {
             InitializeComponent();
             this.username = clientId;
-
-            presenter = new ClientPortalPresenter(this);
+            order = new Order(clientId);
+            presenter = new ClientPortalPresenter(this,order);
             
         }
 
@@ -98,6 +101,19 @@ namespace Iron_helm_order_mgt
         private void refresh_btn_Click(object sender, EventArgs e)
         {
             OrderDataGrid.DataSource = presenter.DisplayClientOrderData();
+            this.state = ApplicationState.getState();
+            foreach (DataGridViewRow row in OrderDataGrid.Rows)
+            {
+
+                if (state.orderStatuses.ContainsKey(Convert.ToInt32(row.Cells["Order Id"].Value)))
+                {
+                    row.Cells["Order Status"].Value = state.orderStatuses[Convert.ToInt32(row.Cells["Order Id"].Value)].orderStatus;
+                    row.Cells["Order Status Changed Date"].Value = state.orderStatuses[Convert.ToInt32(row.Cells["Order Id"].Value)].orderStatusChangedDate;
+                    row.Cells["Estimated Order Completion Date"].Value = state.orderStatuses[Convert.ToInt32(row.Cells["Order Id"].Value)].estimatedCompletionDate;
+                    row.Cells["Total Cost"].Value = state.orderStatuses[Convert.ToInt32(row.Cells["Order Id"].Value)].TotalOrderPrice;
+                }
+
+            }
         }
 
         private void OrderDataGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -108,7 +124,8 @@ namespace Iron_helm_order_mgt
                 e.RowIndex >= 0)
             {
                 int orderId = Convert.ToInt32(OrderDataGrid.CurrentRow.Cells["Order Id"].FormattedValue);
-                Order_Lines_Form orderLinesFrm = new Order_Lines_Form(orderId);
+                string clientId = this.username;
+                Order_Lines_Form orderLinesFrm = new Order_Lines_Form(orderId,clientId);
                 orderLinesFrm.Show();
             }
 

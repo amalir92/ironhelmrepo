@@ -1,5 +1,7 @@
-﻿using Iron_helm_order_mgt.Controls;
+﻿using Iron_helm_order_mgt;
+using Iron_helm_order_mgt.Controls;
 using Iron_helm_order_mgt.DAL;
+using ironhelmrepo.IModels;
 using ironhelmrepo.Views;
 using System.Data;
 
@@ -9,20 +11,18 @@ namespace ironhelmrepo.Presenters
     public class LoginPresenter
     {
         private readonly ILoginView loginView;
-        private UserDAL userDal;
+        private IUser user;
 
-        public LoginPresenter(ILoginView loginView)
+        public LoginPresenter(ILoginView loginView,IUser user)
         {
             this.loginView = loginView;
-            userDal = new UserDAL();
-
+            this.user = user;
         }
+        
         public DataTable getUserByLoginId()
         {
-            DataTable dt = userDal.loginByUserNameAndPassword(loginView.username,loginView.password);
-            return dt;
+            return user.getUserByLoginId(loginView.username, loginView.password);
         }
-
         public void getStateInfo()
         {
             ApplicationState state = ApplicationState.getState();

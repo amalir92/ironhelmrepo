@@ -10,77 +10,84 @@ namespace Iron_helm_order_mgt.DAL
 {
     public class OrderLineItemDAL
     {
-        private SqlConnection conn;
-        private SqlDataAdapter sda;
-        private SqlCommand cmd;
-        IronHelmDbContext context;
+
         OrderDAL orderDal;
         ProductCatalogDAL productCatalogDAL;
 
         public OrderLineItemDAL()
         {
-            orderDal = new OrderDAL();
-            productCatalogDAL = new ProductCatalogDAL();
-            this.context = new IronHelmDbContext();
-            conn = new SqlConnection(ironhelmrepo.Properties.Settings.Default.dbconnection);
+                orderDal = new OrderDAL();
+                productCatalogDAL = new ProductCatalogDAL();
+
         }
 
-        public void create_order_line(int orderNo, String productId, int quantity)
+        
+        public DataTable getOrderLinesByOrderId(int orderId)
         {
-            var newId = 1;
-            if (this.context.orderLineItems.Count() != 0)
-            {
-                var maxId = this.context.orderLineItems.Max(table => table.orderLineItemId);
-                newId = maxId + 1;
-            }
-            OrderLineItem newOrderLine = new OrderLineItem();
-            newOrderLine.OrderId = orderDal.getOrderById(orderNo);
-            newOrderLine.orderLineItemId = newId;
-            newOrderLine.productCode = productId;
-            newOrderLine.quantity = quantity;
 
+            DataTable dt = new DataTable();
             try
             {
-                context.orderLineItems.Add(newOrderLine);
-                context.SaveChanges();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Error " + e);
-            }
-
-            }
-
-            public DataTable getOrderLinesByOrderId(int orderId)
-        {
-            DataTable dt = new DataTable();
-            dt.Columns.Add("Product Code", typeof(string));
-            dt.Columns.Add("Quantity", typeof(int));
-           
-            var query = from o in context.orderLineItems.AsEnumerable()
-                        where o.OrderId.orderId == orderId
-                        orderby o.orderLineItemId descending
-                        select dt.LoadDataRow(new object[] {
+                dt.Columns.Add("Product Code", typeof(string));
+                dt.Columns.Add("Quantity", typeof(int));
+                using (var context = new IronHelmDbContext())
+                {
+                    var query = from o in context.orderLineItems.AsEnumerable()
+                                where o.OrderId.orderId == orderId
+                                orderby o.orderLineItemId descending
+                                select dt.LoadDataRow(new object[] {
                             o.productCode,
                             o.quantity
                             }, false);
-            try
-            {
-                //if(query != null && query.Any()) { 
-                query.CopyToDataTable();
+
+                    //if(query != null && query.Any()) { 
+                    query.CopyToDataTable();
+                }
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error "+e);
+                throw new Exception(e.Message);
+
             }
-            // }
             return dt;
         }
 
         public List<OrderLineItem> getOrderLinesById(int orderId)
         {
-            List<OrderLineItem> orderLine = context.orderLineItems.Where(o => o.OrderId.orderId == orderId).ToList();
+
+            List<OrderLineItem> orderLine = new List<OrderLineItem>();
+            try
+            {
+                using (var context = new IronHelmDbContext())
+                {
+                    orderLine = context.orderLineItems.Where(o => o.OrderId.orderId == orderId).ToList();
+                }
+            }catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
             return orderLine;
+
+        }
+
+        public void updateOrderLineItem(OrderLineItem line)
+        {
+            using (var context = new IronHelmDbContext())
+            {
+                OrderLineItem orderLine = context.orderLineItems.ToList().Single(o => o.OrderId.orderId == line.OrderId.orderId && o.orderLineItemId == line.orderLineItemId);
+                orderLine.labourHoursPerItem = line.labourHoursPerItem;
+                orderLine.costPerHour = line.costPerHour;
+                orderLine.costperLineProduction = line.costperLineProduction;
+
+                try
+                {
+                    context.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("error " + e);
+                }
+            }
         }
 
     }

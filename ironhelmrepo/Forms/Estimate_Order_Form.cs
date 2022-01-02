@@ -1,4 +1,5 @@
-﻿using ironhelmrepo.Presenters;
+﻿using ironhelmrepo.IModels;
+using ironhelmrepo.Presenters;
 using ironhelmrepo.Views;
 using System;
 using System.Collections.Generic;
@@ -13,18 +14,25 @@ namespace Iron_helm_order_mgt.Forms
     public partial class Estimate_Order_Form : Form,IEstimateOrderView
     {
         private EstimateOrderPresenter presenter = null;
-        private Order order;
+        private IOrder iorder;
+        private IOrderLineItem orderLineItem;
         DataTable dt;
 
         public int orderId
         {
-            get { return order.orderId; }
+            get { return iorder.orderId; }
+            set { }
+        }
+
+        public string clientId
+        {
+            get { return iorder.clientId; }
             set { }
         }
         public string orderStatus
         {
-            get { return order.orderStatus; }
-            set { order.orderStatus = value; }
+            get { return iorder.orderStatus; }
+            set { iorder.orderStatus = value; }
         }
         public DateTime estimatedDate
         {
@@ -48,12 +56,35 @@ namespace Iron_helm_order_mgt.Forms
             set { deliveryCost_txt.Text = value.ToString(); }
         }
 
+        public int hours
+        {
+            get { return Convert.ToInt32(hours_txt.Text); }
+            set { hours_txt.Text = value.ToString(); }
+        }
+
+        public double costPerHour
+        {
+            get { return Convert.ToDouble(cost_txt.Text); }
+            set { cost_txt.Text = value.ToString(); }
+        }
+
+        public string productCode
+        {
+            get { return products_cmb.SelectedItem.ToString().Split('-')[0]; }
+            set { }
+        }
+        public int quantity 
+        {
+            get { return Convert.ToInt32(products_cmb.SelectedItem.ToString().Split('-')[1]); }
+            set { }
+        }
         public Estimate_Order_Form(Order order)
         {
             InitializeComponent();
-            this.order = order;
+            this.iorder = order;
+            orderLineItem = new OrderLineItem(order);
             dt = new DataTable();
-            presenter = new EstimateOrderPresenter(this);
+            presenter = new EstimateOrderPresenter(this,iorder,orderLineItem);
         }
 
         private void Estimate_Order_Form_Load(object sender, EventArgs e)
@@ -71,12 +102,11 @@ namespace Iron_helm_order_mgt.Forms
         private void load_products()
         {
             List<OrderLineItem> lines = presenter.getOrderLines();
-            foreach(OrderLineItem l in lines)
+            foreach (OrderLineItem l in lines)
             {
                 products_cmb.Items.Add(l.productCode + "-" + l.quantity);
-               
-            }
-            
+
+            }          
 
         }
 
@@ -89,6 +119,7 @@ namespace Iron_helm_order_mgt.Forms
                     Convert.ToInt32(hours_txt.Text),
                     Convert.ToDouble(cost_txt.Text));
                 dataGridView1.DataSource = dt;
+                presenter.updateOrderLines();
                 products_cmb.SelectedIndex = -1;
                 hours_txt.Text = "";
                 cost_txt.Text = "";
@@ -118,10 +149,11 @@ namespace Iron_helm_order_mgt.Forms
 
         private void schedule_btn_Click(object sender, EventArgs e)
         {
-            presenter.updateOrder();
+            
             string status = presenter.estimateOrder();
             if (status.Equals("SUCCESS"))
             {
+                presenter.updateOrder();
                 MessageBox.Show("Order estimated succesfully");
             }
             else

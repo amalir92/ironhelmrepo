@@ -1,4 +1,6 @@
-﻿using ironhelmrepo.Presenters;
+﻿using Iron_helm_order_mgt.Controls;
+using ironhelmrepo.IModels;
+using ironhelmrepo.Presenters;
 using ironhelmrepo.Views;
 using System;
 using System.Collections.Generic;
@@ -17,6 +19,8 @@ namespace Iron_helm_order_mgt
     {
         String clientId;
         private CreateOrderPresenter presenter = null;
+        private IOrder order;
+        private IProduct product;
         DataTable dt = new DataTable();
 
         List<OrderLineItem> lines = new List<OrderLineItem>();
@@ -38,10 +42,9 @@ namespace Iron_helm_order_mgt
             {
                 for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
                 {
-                    OrderLineItem item = new OrderLineItem();
-                    item.quantity = Convert.ToInt32(dataGridView1.Rows[i].Cells["Quantity"].Value);
-                    //ProductCatalog p = productService.getProductById();
-                    item.productCode = dataGridView1.Rows[i].Cells["Product Code"].Value.ToString();
+                    int quantity = Convert.ToInt32(dataGridView1.Rows[i].Cells["Quantity"].Value);
+                    string productCode = dataGridView1.Rows[i].Cells["Product Code"].Value.ToString();
+                    OrderLineItem item = new OrderLineItem(productCode, quantity);  
                     lines.Add(item);
                 }
                 return lines;
@@ -53,7 +56,9 @@ namespace Iron_helm_order_mgt
         {
             InitializeComponent();
             this.clientId = clientId;
-            presenter = new CreateOrderPresenter(this);
+            order = new Order(clientId);
+            product = new ProductCatalog();
+            presenter = new CreateOrderPresenter(this,order,product);
         }
 
         private void Create_Order_Form_Load(object sender, EventArgs e)
@@ -104,7 +109,7 @@ namespace Iron_helm_order_mgt
             else
             {              
                 int orderId =presenter.createOrder();
-                MessageBox.Show("Order Submitted Successfully");
+                MessageBox.Show("Order Submitted Successfully ");
                 this.Hide();
              }
                     

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Iron_helm_order_mgt.Factory
 {
-    public abstract class Armour
+    public abstract class Armour :ProductCatalog
     {
     }
 }

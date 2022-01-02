@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 
 namespace ironhelmrepo.Views
 {
-    public interface IAdminPortalView
+    public interface IPortalView
     {
         int orderId { get; set; }
-        int clientId { get; set; }
+        string clientId { get; set; }
+
+        string orderStatus { get; set; }
     }
 }

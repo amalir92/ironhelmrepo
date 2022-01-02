@@ -9,74 +9,55 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ironhelmrepo.IModels;
 
 namespace ironhelmrepo.Presenters
 {
     public class ProcessOrderPresenter
     {
         private readonly IProcessOrderView view;
-        private OrderDAL orderDAL;
-        private CustomerDAL customerDAL;
-        private OrderLineItemDAL orderLineItemDAL;
-        private ProductCatalogDAL productCatalogDAL;
+        private IOrder order;
+        private ICustomer customer;
+        private IOrderLineItem orderLineItem;
 
-        public ProcessOrderPresenter(IProcessOrderView view)
+        public ProcessOrderPresenter(IProcessOrderView view,IOrder order,ICustomer customer,IOrderLineItem orderLineItem)
         {
             this.view = view;
-            this.orderDAL = new OrderDAL();
-            this.customerDAL = new CustomerDAL();
-            this.orderLineItemDAL = new OrderLineItemDAL();
-            this.productCatalogDAL = new ProductCatalogDAL();
+            this.order = order;
+            this.customer = customer;
+            this.orderLineItem = orderLineItem;
         }
 
         public string scheduleOrder()
         {
-
-            if (view.order.orderStatus != null && view.order.orderStatus.Equals(Enum.GetName(typeof(OrderStatus), OrderStatus.ACCEPTED)))
-            {
-                orderDAL.setOrderStatus(view.order.orderId, OrderStatus.SCHEDULED);
-                return "SUCCESS";
-            }
-            else
-            {
-                return "ERROR";
-            }
+            order = view.order;
+            return order.validateOrderStatusChange(OrderStatus.SCHEDULED);
         }
 
         public string progressOrder()
         {
-            if (view.order.orderStatus != null && view.order.orderStatus.Equals(Enum.GetName(typeof(OrderStatus), OrderStatus.SCHEDULED)))
-            {
-                orderDAL.setOrderStatus(view.order.orderId, OrderStatus.PROGRESSING);
-                return "SUCCESS";
-            }
-            else
-            {
-                return "ERROR";
-            }
+            order = view.order;
+            return order.validateOrderStatusChange(OrderStatus.PROGRESSING);
         }
+        
 
         public string completeOrder()
         {
-            if (view.order.orderStatus != null && view.order.orderStatus.Equals(Enum.GetName(typeof(OrderStatus), OrderStatus.PROGRESSING)) || view.order.orderStatus.Equals(Enum.GetName(typeof(OrderStatus), OrderStatus.SCHEDULED)))
-            {
-                orderDAL.setOrderStatus(view.order.orderId, OrderStatus.COMPLETED);
-                return "SUCCESS";
-            }
-            else
-            {
-                return "ERROR";
-            }
+            order = view.order;
+            return order.validateOrderStatusChange(OrderStatus.COMPLETED);
+            
         }
 
         public Customer getCustomerById()
         {
-            return customerDAL.getCustomerById(view.order.ClientId);
+            //customer = new Customer(view.order.clientId);
+            return customer.getCustomerById(view.order.clientId);
         }
 
         public List<OrderLineItem> getOrderLinesByOrderId()
         {
-            return orderLineItemDAL.getOrderLinesById(view.order.orderId);
+           // this.orderLineItem = new OrderLineItem(view.order);
+            return orderLineItem.getOrderLinesByOrderId(view.order.orderId,view.order.clientId);
         }
 
         public string initiateProduction() 
@@ -86,20 +67,21 @@ namespace ironhelmrepo.Presenters
             List<ProductCatalog> products = new List<ProductCatalog>();
             foreach (OrderLineItem l in lines)
             {
-                products.Add(productCatalogDAL.getProductById(l.productCode));
+                ProductCatalog p = new ProductCatalog(l.productCode);
+                products.Add(p.getProductById());
             }
 
             string customerSource = Enum.GetName(typeof(CustomerSource), customer.customerSource);
             if (customerSource == "STATE")
             {
                 IProductionFactory factory = new GovernmentItemProductionFactory();
-                ClientOrder storder = new ClientOrder(factory, products);
+                OrderProduction storder = new OrderProduction(factory, products);
                 return "GovernmentItemProductionFactory";
             }
             if (customerSource == "ENTERTAINMENT")
             {
                 IProductionFactory factory = new MovieItemProductionFactory();
-                ClientOrder mvorder = new ClientOrder(factory, products);
+                OrderProduction mvorder = new OrderProduction(factory, products);
                 return "MovieItemProductionFactory";
             }
             return "";

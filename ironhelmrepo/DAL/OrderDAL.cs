@@ -11,138 +11,156 @@ namespace Iron_helm_order_mgt.DAL
 {
     public class OrderDAL
     {
-        private SqlConnection conn;
-        private SqlDataAdapter sda;
-        private SqlCommand cmd;
+
         IronHelmDbContext context;
 
         public OrderDAL()
         {
             this.context = new IronHelmDbContext();
-            conn = new SqlConnection(ironhelmrepo.Properties.Settings.Default.dbconnection);
+
         }
 
         public DataTable getCustomerById(String clientId)
         {
             DataTable dt = new DataTable();
-            dt.Columns.Add("Order Id", typeof(int));
-            dt.Columns.Add("Order Status", typeof(string));
-            dt.Columns.Add("Order Status Changed Date", typeof(DateTime));
-            dt.Columns.Add("Expected Order Completion Changed Date", typeof(DateTime));
-            dt.Columns.Add("Estimated Order Completion Changed Date", typeof(DateTime));
-            dt.Columns.Add("Total Cost", typeof(Double));
-            var query = from o in context.Orders.AsEnumerable()
-                        where o.ClientId == clientId
-                        orderby o.orderStatusChangedDate descending
-                        select dt.LoadDataRow(new object[] {
-                            o.orderId,
-                            o.orderStatus,
-                            o.orderStatusChangedDate,
-                            o.expectedOrderDate,
-                            o.estimatedCompletionDate,
-                            o.TotalOrderPrice
-                            }, false);
-          // if (query.Count()>0){
+            try
+            {
+                    dt = new DataTable();
+                    dt.Columns.Add("Order Id", typeof(int));
+                    dt.Columns.Add("Order Status", typeof(string));
+                    dt.Columns.Add("Order Status Changed Date", typeof(DateTime));
+                    dt.Columns.Add("Expected Order Completion Changed Date", typeof(DateTime));
+                    dt.Columns.Add("Estimated Order Completion Date", typeof(DateTime));
+                    dt.Columns.Add("Total Cost", typeof(Double));
+                    var query = from o in context.Orders.AsEnumerable()
+                                where o.clientId == clientId
+                                orderby o.orderStatusChangedDate descending
+                                select dt.LoadDataRow(new object[] {
+                                    o.orderId,
+                                    o.orderStatus,
+                                    o.orderStatusChangedDate,
+                                    o.expectedOrderDate,
+                                    o.estimatedCompletionDate,
+                                    o.TotalOrderPrice
+                                    }, false);
+                // if (query.Count()>0){
                 query.AsEnumerable().GroupBy(row => row.Field<int>("Order Id")).Select(group => group.First()).CopyToDataTable();
-          //  }
-            return dt;
-        }
+            //  }
+            }catch(Exception e){
+                throw new Exception(e.Message);
+            }
+                return dt;
+            }
 
-        public Order getOrderById(int orderId)
+        public Order getOrderById(Order order_)
         {
-            Order order = context.Orders.Single(o => o.orderId == orderId);
-            return order;
-        }
-
-        public void setOrderStatus(int orderId,OrderStatus status)
-        {
-            Order order = context.Orders.Single(o => o.orderId == orderId);
-            order.orderStatus = Enum.GetName(typeof(OrderStatus), status);
-            order.orderStatusChangedDate = DateTime.Now;
-            try 
-            { 
-            context.SaveChanges();
-             }
+            Order order = new Order();
+            try
+            {
+                order = context.Orders.Single(o => o.orderId == order_.orderId);
+            }
             catch (Exception e)
             {
-                Console.WriteLine("error " + e);
+                throw new Exception(e.Message);
+            }
+            return order;
+
+        }
+
+        public void setOrderStatus(Order order_)
+        {
+            using (var context = new IronHelmDbContext())
+            {
+                Order order = context.Orders.Single(o => o.orderId == order_.orderId);
+                order.orderStatus = order_.orderStatus;
+                order.orderStatusChangedDate = order_.orderStatusChangedDate;
+                try
+                {
+                    context.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("error " + e);
+                }
             }
 }
 
-        public int createOrder(String clientId,DateTime expectedDate,List<OrderLineItem> lines)
+        public int createOrder(Order newOrder)
         {
-            
-            var newId = 1;
-            if (this.context.Orders.Count() != 0) { 
-                var maxId = this.context.Orders.Max(table => table.orderId);
-                newId = maxId + 1;
-            }
-            Order newOrder = new Order();
-            newOrder.orderId = newId;
-            newOrder.ClientId = clientId;
-            newOrder.orderStatusChangedDate = DateTime.Now;
-            newOrder.orderStatus = "NEW";
-            newOrder.estimatedCompletionDate = DateTime.Now;
-            newOrder.expectedOrderDate = expectedDate;
-            newOrder.OrderLineItems = new List<OrderLineItem>();
-            foreach (OrderLineItem o in lines)
+            using (var context = new IronHelmDbContext())
             {
-                newOrder.OrderLineItems.Add(o);
+
+                var newId = 1;
+                if (context.Orders.Count() != 0)
+                {
+                    var maxId = context.Orders.Max(table => table.orderId);
+                    newId = maxId + 1;
+                }
+                newOrder.orderId = newId;
+                try
+                {
+                    context.Orders.Add(newOrder);
+                    context.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    throw new Exception(e.Message);
+                }
+                return newId;
+
+               
+
             }
-           try
-            {
-                context.Orders.Add(newOrder);
-                context.SaveChanges();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("error " + e);
-            }
-            return newId;
         }
 
-        public void updateOrder(int orderId, DateTime estimatedDate,Double cost)
+        public void updateOrder(Order order_)
         {
-
-            Order order = context.Orders.Single(o => o.orderId == orderId);
-            order.estimatedCompletionDate= estimatedDate;
-            order.TotalOrderPrice = cost;
             try
             {
-                context.SaveChanges();
+                using (var context = new IronHelmDbContext()) { 
+                    Order order = context.Orders.Single(o => o.orderId == order_.orderId);
+                    order.estimatedCompletionDate = order_.estimatedCompletionDate;
+                    order.TotalOrderPrice = order_.TotalOrderPrice;
+
+                    context.SaveChanges();
+                }
             }
             catch (Exception e)
             {
-                Console.WriteLine("error " + e);
+                throw new Exception(e.Message);
+
             }
         }
 
         public DataTable getOrders()
         {
-            DataTable dt = new DataTable();
-            dt.Columns.Add("Order Id", typeof(string));
-            dt.Columns.Add("Client Id", typeof(string));
-            dt.Columns.Add("Order Status", typeof(string));
-            dt.Columns.Add("Order Status Changed Date", typeof(DateTime));
-            dt.Columns.Add("Expected Order Completion Changed Date", typeof(DateTime));
-            dt.Columns.Add("Estimated Order Completion Changed Date", typeof(DateTime));
-            dt.Columns.Add("Total Cost", typeof(Double));
-            var query = from o in context.Orders.AsEnumerable()
-                        orderby o.orderStatusChangedDate descending
-                        select dt.LoadDataRow(new object[] {
+            using (var context = new IronHelmDbContext())
+            {
+                DataTable dt = new DataTable();
+                dt.Columns.Add("Order Id", typeof(string));
+                dt.Columns.Add("Client Id", typeof(string));
+                dt.Columns.Add("Order Status", typeof(string));
+                dt.Columns.Add("Order Status Changed Date", typeof(DateTime));
+                dt.Columns.Add("Expected Order Completion Changed Date", typeof(DateTime));
+                dt.Columns.Add("Estimated Order Completion Date", typeof(DateTime));
+                dt.Columns.Add("Total Cost", typeof(Double));
+                var query = from o in context.Orders.AsEnumerable().ToList()
+                            orderby o.orderStatusChangedDate descending
+                            select dt.LoadDataRow(new object[] {
                             o.orderId,
-                            o.ClientId,
+                            o.clientId,
                             o.orderStatus,
                             o.orderStatusChangedDate,
                             o.expectedOrderDate,
                             o.estimatedCompletionDate,
                             o.TotalOrderPrice
                             }, false);
-            //if (query!=null&&query.Any())
-            //{
+                //if (query!=null&&query.Any())
+                //{
                 query?.CopyToDataTable();
-          //  }
-            return dt;
+                //  }
+                return dt;
+            }
         }
     }
 }

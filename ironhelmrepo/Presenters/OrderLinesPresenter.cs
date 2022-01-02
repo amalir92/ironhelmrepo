@@ -1,4 +1,6 @@
-﻿using Iron_helm_order_mgt.DAL;
+﻿using Iron_helm_order_mgt;
+using Iron_helm_order_mgt.DAL;
+using ironhelmrepo.IModels;
 using ironhelmrepo.Views;
 using System;
 using System.Collections.Generic;
@@ -12,17 +14,17 @@ namespace ironhelmrepo.Presenters
     public class OrderLinesPresenter
     {
         private readonly IOrderLinesView view;
-        private OrderLineItemDAL orderLineItemDAL;
-        public OrderLinesPresenter(IOrderLinesView view)
+        private IOrderLineItem orderLineItem;
+        public OrderLinesPresenter(IOrderLinesView view, IOrderLineItem orderLineItem)
         {
             this.view = view;
-            orderLineItemDAL = new OrderLineItemDAL();
-
+            this.orderLineItem = orderLineItem;
         }
 
         public DataTable getOrderLines()
         {
-            return orderLineItemDAL.getOrderLinesByOrderId(view.orderId);
+           // orderLineItem = new OrderLineItem(new Order(view.orderId,view.clientId));
+            return orderLineItem.getOrderLinesTableByOrderId(view.orderId, view.clientId);
 
         }
     }

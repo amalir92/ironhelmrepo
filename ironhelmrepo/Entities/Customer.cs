@@ -1,16 +1,20 @@
-﻿using Iron_helm_order_mgt.Entities;
+﻿using Iron_helm_order_mgt.DAL;
+using Iron_helm_order_mgt.Entities;
+using ironhelmrepo.IModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Iron_helm_order_mgt
 {
-   public  class Customer
+   public  class Customer:ICustomer
     {
+        private CustomerDAL customerDAL;
         [Key]
         public String clientId { get; set; }
 
@@ -21,19 +25,45 @@ namespace Iron_helm_order_mgt
 
         public string remarks { get; set; }
 
-        public void create_order()
+        public Customer()
         {
-
+            customerDAL = new CustomerDAL();
+        }
+        public Customer(string clientId)
+        {
+            this.clientId = clientId;
+            customerDAL = new CustomerDAL();
+        }
+        public Customer (string clientId,string clientAddress,CustomerSource customerSource,string clientPhoneNumber)
+        {
+            customerDAL = new CustomerDAL();
+            this.clientId = clientId;
+            this.clientAddress = clientAddress;
+            this.customerSource = customerSource;
+            this.clientPhoneNumber = clientPhoneNumber;
         }
 
-        public void cancel_order()
+        public Customer addNewCustomer(string clientId, string clientAddress, CustomerSource customerSource, string clientPhoneNumber)
         {
-
+            return new Customer(clientId, clientAddress, customerSource, clientPhoneNumber);
         }
 
-        public void accept_or_decline_order()
+        public void updateCustomer(Customer customer)
         {
+            this.clientAddress = customer.clientAddress;
+            this.clientPhoneNumber = customer.clientPhoneNumber;
+        }
 
+        public DataTable getCustomerDetailsById(string clientId)
+        {
+            this.clientId = clientId;
+            return customerDAL.getCustomerDetailsById(this.clientId);
+        }
+
+        public Customer getCustomerById(string clientId)
+        {
+            this.clientId = clientId;
+            return customerDAL.getCustomerById(this);
         }
     }
 }

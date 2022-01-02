@@ -1,6 +1,6 @@
 ﻿using Iron_helm_order_mgt.Entities;
 using Iron_helm_order_mgt.Factory;
-
+using ironhelmrepo.IModels;
 using ironhelmrepo.Presenters;
 using ironhelmrepo.Views;
 using System;
@@ -17,10 +17,12 @@ namespace Iron_helm_order_mgt.Forms
 {
     public partial class Order_Progress_Form : Form,IProcessOrderView
     {
-        private Order order;
+        private IOrder order;
+        private ICustomer customer;
+        private IOrderLineItem orderLineItem;
         private ProcessOrderPresenter presenter = null;
 
-        Order IProcessOrderView.order
+        IOrder IProcessOrderView.order
         {
             get { return order; }
             set { }
@@ -30,9 +32,11 @@ namespace Iron_helm_order_mgt.Forms
         {
             InitializeComponent();
             this.order = order;
+            customer = new Customer(order.clientId);
+            orderLineItem = new OrderLineItem(order);
             order_txt.Text = order.orderId.ToString();
             order_txt.Enabled = false;
-            presenter = new ProcessOrderPresenter(this);
+            presenter = new ProcessOrderPresenter(this,order,customer,orderLineItem);
         }
 
         public void order_process()
@@ -55,6 +59,11 @@ namespace Iron_helm_order_mgt.Forms
         private void finish_btn_Click(object sender, EventArgs e)
         {
             Hide();
+        }
+
+        private void Order_Progress_Form_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

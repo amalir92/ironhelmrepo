@@ -73,6 +73,7 @@ namespace Iron_helm_order_mgt.Forms
             this.Controls.Add(this.ok_btn);
             this.Name = "Schedule_Order_Form";
             this.Text = "View Schedule";
+            this.Load += new System.EventHandler(this.Schedule_Order_Form_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

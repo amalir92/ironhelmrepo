@@ -10,34 +10,39 @@ namespace Iron_helm_order_mgt.DAL
 {
     public class ProductCatalogDAL
     {
-        private SqlConnection conn;
-        private SqlDataAdapter sda;
-        private SqlCommand cmd;
-        IronHelmDbContext context;
-
-        public ProductCatalogDAL()
-        {
-            this.context = new IronHelmDbContext();
-            conn = new SqlConnection(ironhelmrepo.Properties.Settings.Default.dbconnection);
-        }
 
         public ProductCatalog getProductById(string productId)
         {
-            ProductCatalog product = context.ProductCatalogs.Single(p => p.productId == productId);
+            ProductCatalog product = new ProductCatalog();
+            try
+            {
+                using (var context = new IronHelmDbContext())
+                product = context.ProductCatalogs.Single(p => p.productId == productId);
+            }catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
             return product;
+
         }
 
         public DataTable getAllPoducts()
         {
-
-            SqlConnection connection = new SqlConnection(ironhelmrepo.Properties.Settings.Default.dbconnection);
-            string sql = "select * from productCatalog";
-            connection.Open();
-            sda = new SqlDataAdapter(sql, conn);
-
-            DataTable da = new DataTable();
-            sda.Fill(da);
-            return da;
+            //DataTable da;
+            using (var context = new IronHelmDbContext())
+            {
+                DataTable dt = new DataTable();
+                dt.Columns.Add("productId", typeof(string));
+                dt.Columns.Add("productName", typeof(string));
+               var query = from p in context.ProductCatalogs.AsEnumerable().ToList()
+                           select dt.LoadDataRow(new object[] {
+                            p.productId,
+                            p.productName
+                            }, false);
+                query.CopyToDataTable();
+                return dt;
+            }
+            
         }
 
 

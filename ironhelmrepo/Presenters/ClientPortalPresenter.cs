@@ -1,5 +1,6 @@
 ﻿using Iron_helm_order_mgt;
 using Iron_helm_order_mgt.DAL;
+using ironhelmrepo.IModels;
 using ironhelmrepo.Views;
 using System;
 using System.Collections.Generic;
@@ -12,46 +13,30 @@ namespace ironhelmrepo.Presenters
 {
     public class ClientPortalPresenter
     {
-        private readonly IClientPortalView portalview;
-        private OrderDAL orderDAL;
-        private OrderLineItemDAL orderLineItemDAL;
+        private readonly IPortalView portalview;
+        private IOrder order;
 
-        public ClientPortalPresenter(IClientPortalView portalview)
+        public ClientPortalPresenter(IPortalView portalview,IOrder order)
         {
             this.portalview = portalview;
-            orderDAL = new OrderDAL();
-            orderLineItemDAL = new OrderLineItemDAL();
-
+            this.order = order;
         }
         public DataTable DisplayClientOrderData()
         {
-            DataTable dt = orderDAL.getCustomerById(portalview.clientId);
-            return dt;
+            return order.getCustomerOrdersById(portalview.clientId);
         }
 
         public string AcceptOrder()
         {
-            if (portalview.orderStatus != null && portalview.orderStatus.Equals(Enum.GetName(typeof(OrderStatus), OrderStatus.ESTIMATED)))
-            {
-                orderDAL.setOrderStatus(portalview.orderId, OrderStatus.ACCEPTED);
-                return "SUCCESS";
-            }
-            else
-            {
-                return "ERROR";
-            }
+            Order order = new Order(portalview.orderId, portalview.clientId);
+            order=order.getOrderById(portalview.orderId, portalview.clientId);
+            return order.validateOrderStatusChange(OrderStatus.ACCEPTED);
         }
-            public string CancelOrder()
-            {
-            if (portalview.orderStatus.Equals(Enum.GetName(typeof(OrderStatus), OrderStatus.NEW)))
-            {
-                orderDAL.setOrderStatus(portalview.orderId, OrderStatus.CANCELLED);
-                return "SUCCESS";
-            }
-            else
-            {
-                return "ERROR";
-            }
+        public string CancelOrder()
+        {
+            Order order = new Order(portalview.orderId, portalview.clientId);
+            order = order.getOrderById(portalview.orderId, portalview.clientId);
+            return order.validateOrderStatusChange(OrderStatus.CANCELLED);
         }
 
     }
