@@ -18,7 +18,6 @@ namespace IronHelmTest
             ClientDetailsPresenter presenter = new ClientDetailsPresenter(moc,customer);
             DataTable dt = presenter.getCustomerDetailsById();
             Assert.AreEqual(dt.Rows[0][0], customer.clientId);
-            Assert.AreEqual(dt.Rows[0][2], customer.customerSource);
         }
     }
 }

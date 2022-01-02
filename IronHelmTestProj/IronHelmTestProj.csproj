@@ -60,15 +60,20 @@
   <ItemGroup>
     <Compile Include="ClientPortalPresenterScreenMoc.cs" />
     <Compile Include="ClientPortalPresenterTests.cs" />
+    <Compile Include="CreateOrderPresenterScrennMoc.cs" />
     <Compile Include="CustomerDALTests.cs" />
     <Compile Include="CustomerDetailsPresenterTests.cs" />
     <Compile Include="CustomerDetailsScreenMoc.cs" />
+    <Compile Include="EstimateOrderScreenMoc.cs" />
     <Compile Include="LoginPresenterTests.cs" />
     <Compile Include="LoginScreenMoc.cs" />
     <Compile Include="OrderDALTests.cs" />
     <Compile Include="OrderLineItemDALTests.cs" />
     <Compile Include="ProductCatalogDALTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CreateOrderPresenterTests.cs" />
+    <Compile Include="OrderLinesPresenterTests.cs" />
+    <Compile Include="EstimateOrderPresenterTests.cs" />
     <Compile Include="UserDALTests.cs" />
   </ItemGroup>
   <ItemGroup>

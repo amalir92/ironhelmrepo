@@ -43,11 +43,10 @@ namespace IronHelmTest
         [TestMethod]
         public void getOrderLinesByOrderId_DetailsNotInDb()
         {
-            int orderId = 0009;
+            int orderId = 1698;
 
             OrderLineItemDAL order = new OrderLineItemDAL();
-            DataTable dt = order.getOrderLinesByOrderId(orderId);
-            Assert.IsTrue(dt.Rows.Count==0);
+            Assert.ThrowsException<Exception>(() => order.getOrderLinesByOrderId(orderId));
         }
 
         [TestMethod]

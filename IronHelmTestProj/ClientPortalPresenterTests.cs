@@ -18,7 +18,7 @@ namespace IronHelmTest
             moc.clientId = "001C";
             ClientPortalPresenter presenter = new ClientPortalPresenter(moc,order);
             DataTable dt = presenter.DisplayClientOrderData();
-            Assert.AreEqual(dt.Rows.Count,2);
+            Assert.IsTrue(dt.Rows.Count>2);
             
         }
     }
