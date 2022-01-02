@@ -11,32 +11,29 @@ namespace Iron_helm_order_mgt.DAL
 {
     public class UserDAL 
     {
-        IronHelmDbContext context;
-
-        public UserDAL()
-        {
-            this.context = new IronHelmDbContext();
-        }
-
+       
         public DataTable loginByUserNameAndPassword(string username,string password)
         {
-            DataTable dt = new DataTable();
-            dt.Columns.Add("userId", typeof(string));
-            dt.Columns.Add("userType", typeof(string));
-            var query = from user in context.Users.AsEnumerable()
-                        where user.userId == username
-                        && user.password== password
-                        select dt.LoadDataRow(new object[] {
+            using (var context = new IronHelmDbContext())
+            {
+                DataTable dt = new DataTable();
+                dt.Columns.Add("userId", typeof(string));
+                dt.Columns.Add("userType", typeof(string));
+                var query = from user in context.Users.AsEnumerable().ToList()
+                            where user.userId == username
+                            && user.password == password
+                            select dt.LoadDataRow(new object[] {
                             user.userId,
                             user.userType
                             }, false);
-            if (query != null && query.Any())
-            { 
-                query?.CopyToDataTable();
-           }
+                if (query != null && query.Any())
+                {
+                    query?.CopyToDataTable();
+                }
 
 
-            return dt;
+                return dt;
+            }
         }
     }
 }

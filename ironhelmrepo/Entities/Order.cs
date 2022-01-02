@@ -119,7 +119,7 @@ namespace Iron_helm_order_mgt
             this.estimatedCompletionDate = DateTime.Now;
             int orderId = dal.createOrder(this);
             this.state = ApplicationState.getState();
-            state.orderStatuses.Add(orderId, this);
+            state.orderStatuses[orderId] = this;
             return orderId;
         }
 
@@ -161,7 +161,7 @@ namespace Iron_helm_order_mgt
                     this.orderStatus = (Enum.GetName(typeof(OrderStatus), OrderStatus.ACCEPTED));
                     this.orderStatusChangedDate = DateTime.Now;
                     dal.setOrderStatus(this);
-                    state.orderStatuses.Add(orderId, this);
+                    state.orderStatuses[orderId]=this;
                     return "SUCCESS";
                 }
                 else
@@ -176,7 +176,7 @@ namespace Iron_helm_order_mgt
                     this.orderStatus = (Enum.GetName(typeof(OrderStatus), OrderStatus.CANCELLED));
                     this.orderStatusChangedDate = DateTime.Now;
                     dal.setOrderStatus(this);
-                    state.orderStatuses.Add(orderId, this);
+                    state.orderStatuses[orderId] = this;
                     return "SUCCESS";
                 }
                 else

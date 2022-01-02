@@ -10,16 +10,15 @@ namespace Iron_helm_order_mgt.DAL
 {
     public class OrderLineItemDAL
     {
-        IronHelmDbContext context;
+
         OrderDAL orderDal;
         ProductCatalogDAL productCatalogDAL;
 
         public OrderLineItemDAL()
         {
-            orderDal = new OrderDAL();
-            productCatalogDAL = new ProductCatalogDAL();
-            this.context = new IronHelmDbContext();
-            
+                orderDal = new OrderDAL();
+                productCatalogDAL = new ProductCatalogDAL();
+
         }
 
         //public void createOrderLine(int orderNo, String productId, int quantity, int labourHours, double costPerHour)
@@ -46,51 +45,59 @@ namespace Iron_helm_order_mgt.DAL
 
             public DataTable getOrderLinesByOrderId(int orderId)
         {
-            DataTable dt = new DataTable();
-            dt.Columns.Add("Product Code", typeof(string));
-            dt.Columns.Add("Quantity", typeof(int));
-           
-            var query = from o in context.orderLineItems.AsEnumerable()
-                        where o.OrderId.orderId == orderId
-                        orderby o.orderLineItemId descending
-                        select dt.LoadDataRow(new object[] {
+            using (var context = new IronHelmDbContext())
+            {
+                DataTable dt = new DataTable();
+                dt.Columns.Add("Product Code", typeof(string));
+                dt.Columns.Add("Quantity", typeof(int));
+
+                var query = from o in context.orderLineItems.AsEnumerable().ToList()
+                            where o.OrderId.orderId == orderId
+                            orderby o.orderLineItemId descending
+                            select dt.LoadDataRow(new object[] {
                             o.productCode,
                             o.quantity
                             }, false);
-            try
-            {
-                //if(query != null && query.Any()) { 
-                query.CopyToDataTable();
+                try
+                {
+                    //if(query != null && query.Any()) { 
+                    query.CopyToDataTable();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error " + e);
+                }
+                // }
+                return dt;
             }
-            catch (Exception e)
-            {
-                Console.WriteLine("Error "+e);
-            }
-            // }
-            return dt;
         }
 
         public List<OrderLineItem> getOrderLinesById(int orderId)
         {
-            List<OrderLineItem> orderLine = context.orderLineItems.Where(o => o.OrderId.orderId == orderId).ToList();
-            return orderLine;
+            using (var context = new IronHelmDbContext())
+            {
+                List<OrderLineItem> orderLine = context.orderLineItems.ToList().Where(o => o.OrderId.orderId == orderId).ToList();
+                return orderLine;
+            }
         }
 
         public void updateOrderLineItem(OrderLineItem line)
         {
+            using (var context = new IronHelmDbContext())
+            {
+                OrderLineItem orderLine = context.orderLineItems.ToList().Single(o => o.OrderId.orderId == line.OrderId.orderId && o.orderLineItemId == line.orderLineItemId);
+                orderLine.labourHoursPerItem = line.labourHoursPerItem;
+                orderLine.costPerHour = line.costPerHour;
+                orderLine.costperLineProduction = line.costperLineProduction;
 
-            OrderLineItem orderLine = context.orderLineItems.Single(o => o.OrderId.orderId == line.OrderId.orderId && o.orderLineItemId==line.orderLineItemId);
-            orderLine.labourHoursPerItem = line.labourHoursPerItem;
-            orderLine.costPerHour = line.costPerHour;
-            orderLine.costperLineProduction = line.costperLineProduction;
-            
-            try
-            {
-                context.SaveChanges();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("error " + e);
+                try
+                {
+                    context.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("error " + e);
+                }
             }
         }
 
