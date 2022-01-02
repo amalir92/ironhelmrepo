@@ -13,11 +13,17 @@ namespace Iron_helm_order_mgt.DAL
 
         public ProductCatalog getProductById(string productId)
         {
-            using (var context = new IronHelmDbContext())
+            ProductCatalog product = new ProductCatalog();
+            try
             {
-                ProductCatalog product = context.ProductCatalogs.Single(p => p.productId == productId);
-                return product;
+                using (var context = new IronHelmDbContext())
+                product = context.ProductCatalogs.Single(p => p.productId == productId);
+            }catch(Exception e)
+            {
+                throw new Exception(e.Message);
             }
+            return product;
+
         }
 
         public DataTable getAllPoducts()

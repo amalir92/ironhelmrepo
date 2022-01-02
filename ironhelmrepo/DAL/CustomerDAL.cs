@@ -12,32 +12,55 @@ namespace Iron_helm_order_mgt.DAL
       
         public DataTable getCustomerDetailsById(string customerId)
         {
-            using (var context = new IronHelmDbContext())
+
+            DataTable dt = new DataTable();
+            try
             {
-                DataTable dt = new DataTable();
+                dt = new DataTable();
                 dt.Columns.Add("Customer Id", typeof(string));
                 dt.Columns.Add("Customer Source", typeof(string));
-                var query = from o in context.Customers.AsEnumerable().ToList()
-                            where o.clientId == customerId
-                            select dt.LoadDataRow(new object[] {
+                using (var context = new IronHelmDbContext())
+                {
+                    var query = from o in context.Customers.AsEnumerable()
+
+                                where o.clientId == customerId
+                                select dt.LoadDataRow(new object[] {
                             o.clientId,
                             o.customerSource
                             }, false);
-                //  if (query != null && query.Any())
-                //  {
-                query?.CopyToDataTable();
-                //   }
-                return dt;
+                    //  if (query != null && query.Any())
+                    //  {
+                    query?.CopyToDataTable();
+                    //   }
+                }
+
             }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            return dt;
+
         }
 
         public Customer getCustomerById(Customer c)
         {
-            using (var context = new IronHelmDbContext())
+
+           
+            
+            Customer customer;
+            try
             {
-                Customer customer = context.Customers.Single(o => o.clientId == c.clientId);
-                return customer;
+                using (var context = new IronHelmDbContext()) { 
+                    customer = context.Customers.Single(o => o.clientId == c.clientId);
+                }
             }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            return customer;
+
         }
     }
 }
