@@ -28,6 +28,10 @@ namespace ironhelmrepo.Factory
             {
                 return new CustomSword();
             }
-        }
+            public Custom manufactureCustom()
+            {
+                return new CustomItem();
+            }
+    }
     }
 

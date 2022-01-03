@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ironhelmrepo.IModels;
+using ironhelmrepo.Factory;
 
 namespace ironhelmrepo.Presenters
 {
@@ -83,6 +84,12 @@ namespace ironhelmrepo.Presenters
                 IProductionFactory factory = new MovieItemProductionFactory();
                 OrderProduction mvorder = new OrderProduction(factory, products);
                 return "MovieItemProductionFactory";
+            }
+            if (customerSource == "INDIVIDUAL")
+            {
+                IProductionFactory factory = new CustomItemProductionFactory();
+                OrderProduction csorder = new OrderProduction(factory, products);
+                return "CustomItemProductionFactory";
             }
             return "";
         }

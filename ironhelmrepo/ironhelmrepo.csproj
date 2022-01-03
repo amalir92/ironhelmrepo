@@ -96,6 +96,7 @@
     <Compile Include="Entities\OrderStatus.cs" />
     <Compile Include="Entities\ProductCatalog.cs" />
     <Compile Include="Entities\User.cs" />
+    <Compile Include="Factory\Custom.cs" />
     <Compile Include="Factory\Armour.cs" />
     <Compile Include="Factory\CustomArmour.cs" />
     <Compile Include="Factory\CustomItemProductionFactory.cs" />
@@ -110,6 +111,7 @@
     <Compile Include="Factory\Packaging.cs" />
     <Compile Include="Factory\StandardDelivery.cs" />
     <Compile Include="Factory\StandardPackaging.cs" />
+    <Compile Include="Factory\CustomItem.cs" />
     <Compile Include="Factory\StateArmour.cs" />
     <Compile Include="Factory\StateSwords.cs" />
     <Compile Include="Factory\Swords.cs" />

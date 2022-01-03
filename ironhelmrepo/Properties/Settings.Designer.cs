@@ -26,8 +26,8 @@ namespace ironhelmrepo.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\kavindu.jayawardena\\" +
-            "Documents\\final\\ironhelmrepo\\ironhelmrepo\\IronHelmDB.mdf;Integrated Security=Tru" +
-            "e")]
+            "Documents\\amaliprojects\\Assigment-GroupWork\\code\\ironhelmrepo\\ironhelmrepo\\IronH" +
+            "elmDB.mdf;Integrated Security=True")]
         public string dbconnection {
             get {
                 return ((string)(this["dbconnection"]));

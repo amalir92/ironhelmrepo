@@ -27,5 +27,10 @@ namespace Iron_helm_order_mgt.Factory
         {
             return new MovieSwords();
         }
+        public Custom manufactureCustom()
+        {
+            return new CustomItem();
+        }
+
     }
 }

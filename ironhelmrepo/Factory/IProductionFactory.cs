@@ -10,6 +10,7 @@ namespace Iron_helm_order_mgt.Factory
     {
         Armour manufactureArmour();
         Swords manufactureSwords();
+        Custom manufactureCustom();
         Packaging createPackaging();
         Delivery createDelivery();
 

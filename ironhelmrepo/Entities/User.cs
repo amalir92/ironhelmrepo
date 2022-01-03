@@ -36,7 +36,7 @@ namespace Iron_helm_order_mgt
         public DataTable getUserByLoginId(string username,string password)
         {
             password = encryptPassword(password);
-            Console.WriteLine(password);
+            //Console.WriteLine(password);
             DataTable dt = this.userDal.loginByUserNameAndPassword(username, password);
             return dt;
         }

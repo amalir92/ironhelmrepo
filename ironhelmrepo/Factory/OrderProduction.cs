@@ -15,6 +15,7 @@ namespace Iron_helm_order_mgt.Factory
         private Delivery delivery;
         private Swords swords;
         private Armour armour;
+        private Custom custom;
         private Order order;
 
         public OrderProduction(IProductionFactory factory,List<ProductCatalog> products)
@@ -30,6 +31,10 @@ namespace Iron_helm_order_mgt.Factory
                 if (product.productName == "armour")
                 {
                     armour = factory.manufactureArmour();
+                }
+                if (product.productName == "custom")
+                {
+                    custom = factory.manufactureCustom();
                 }
             }
             
