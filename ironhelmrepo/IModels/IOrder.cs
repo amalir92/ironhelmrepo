@@ -16,10 +16,10 @@ namespace ironhelmrepo.IModels
         string orderStatus { get; set; }
         int createOrder(List<OrderLineItem> lines, string clientId, DateTime expectedDate);
 
-        void updateOrder(double packageCost, double deliveryCost, List<OrderLineItem> lines, double totalCost, string status, DateTime estimatedCompletionDate);
+        void updateOrder(double packageCost, double deliveryCost,List<OrderLineItem> lines, double totalCost, string status, DateTime estimatedCompletionDate);
 
 
-        double calculateTotalCost(List<OrderLineItem> lines);
+        double calculateTotalCost(List<OrderLineItem> lines, double packageCost, double deliveryCost);
 
         string validateOrderStatusChange(OrderStatus targetOrderStatus);
 
