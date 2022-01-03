@@ -6,6 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
+/*
+ * this encryption and decryption was referenced from http://blog.zebsadiq.com/post/AESCBCPKCS5Padding-EncryptionDecryption-in-C.aspx
+ */
 
 namespace ironhelmrepo.Controls
 {
