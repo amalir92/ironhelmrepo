@@ -76,9 +76,21 @@
     <Compile Include="ProcessOrderPresenterTests.cs" />
     <Compile Include="ProcessOrderViewScreenMoc.cs" />
     <Compile Include="ProductCatalogDALTests.cs" />
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="StateArmourTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UnitTest2.cs" />
+    <Compile Include="StandardPackagingTest.cs" />
+    <Compile Include="StandardDeliveryTest.cs" />
+    <Compile Include="ProductCatalogTest.cs" />
+    <Compile Include="OrderTest.cs" />
+    <Compile Include="OrderLineItemTest.cs" />
+    <Compile Include="MovieSwordsTest.cs" />
+    <Compile Include="MovieArmourTest.cs" />
+    <Compile Include="CustomerTest.cs" />
+    <Compile Include="CustomSwordTest.cs" />
+    <Compile Include="CustomArmourTest.cs" />
+    <Compile Include="COrganizationTest.cs" />
+    <Compile Include="UserTest.cs" />
+    <Compile Include="StateSwordsTest.cs" />
     <Compile Include="UserDALTests.cs" />
   </ItemGroup>
   <ItemGroup>
