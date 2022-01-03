@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+/*
+ * This factory class implementation referenced from https://www.c-sharpcorner.com/article/factory-method-design-pattern-in-c-sharp/
+ */
 namespace Iron_helm_order_mgt.Factory
 {
     public class OrderProduction
