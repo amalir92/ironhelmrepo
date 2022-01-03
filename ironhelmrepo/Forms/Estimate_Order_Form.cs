@@ -154,11 +154,11 @@ namespace Iron_helm_order_mgt.Forms
             if (status.Equals("SUCCESS"))
             {
                 presenter.updateOrder();
-                MessageBox.Show("Order estimated succesfully");
+                MessageBox.Show("Order estimated succesfully. Await customer acceptance to schedule order");
             }
             else
             {
-                MessageBox.Show("Order coud not be estimated");
+                MessageBox.Show("Order could not be estimated");
             }
             Hide();
         }

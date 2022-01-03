@@ -36,7 +36,7 @@ namespace Iron_helm_order_mgt.Forms
             // 
             // ok_btn
             // 
-            this.ok_btn.Location = new System.Drawing.Point(38, 58);
+            this.ok_btn.Location = new System.Drawing.Point(38, 78);
             this.ok_btn.Name = "ok_btn";
             this.ok_btn.Size = new System.Drawing.Size(75, 23);
             this.ok_btn.TabIndex = 4;
@@ -46,7 +46,7 @@ namespace Iron_helm_order_mgt.Forms
             // 
             // cancel_btn
             // 
-            this.cancel_btn.Location = new System.Drawing.Point(119, 58);
+            this.cancel_btn.Location = new System.Drawing.Point(119, 78);
             this.cancel_btn.Name = "cancel_btn";
             this.cancel_btn.Size = new System.Drawing.Size(75, 23);
             this.cancel_btn.TabIndex = 5;
@@ -59,9 +59,10 @@ namespace Iron_helm_order_mgt.Forms
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(35, 33);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(179, 13);
+            this.label1.Size = new System.Drawing.Size(256, 26);
             this.label1.TabIndex = 6;
-            this.label1.Text = "Set Order for Automatic Scheduling?";
+            this.label1.Text = "Automatic Scheduling is not available in this version! \n Set Order for Manual Sch" +
+    "eduling?";
             // 
             // Schedule_Order_Form
             // 

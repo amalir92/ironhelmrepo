@@ -40,7 +40,7 @@ namespace Iron_helm_order_mgt.Forms
             string status = presenter.scheduleOrder();
             if (status.Equals("SUCCESS"))
             {
-                MessageBox.Show("Order scheduled succesfully");
+                MessageBox.Show("Order scheduled succesfully. Click Process Order to initiate the order production");
                 
             }
             else
@@ -59,5 +59,6 @@ namespace Iron_helm_order_mgt.Forms
         {
 
         }
+
     }
 }
