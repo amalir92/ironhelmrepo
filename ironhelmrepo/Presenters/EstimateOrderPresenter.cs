@@ -54,7 +54,7 @@ namespace ironhelmrepo.Presenters
         {
             order = order.getOrderById(view.orderId, view.clientId);
             List<OrderLineItem> orderlines = getOrderLines();
-            order.updateOrder(view.packageCost, view.deliveryCost, orderlines, order.calculateTotalCost(orderlines),"ESTIMATED",view.estimatedDate);
+            order.updateOrder(view.packageCost, view.deliveryCost, orderlines, order.calculateTotalCost(orderlines, view.packageCost, view.deliveryCost),"ESTIMATED",view.estimatedDate);
             
         }
 

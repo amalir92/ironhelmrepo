@@ -34,3 +34,6 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: InternalsVisibleTo("ironhelmrepo.Tests")]
+[assembly: InternalsVisibleTo("ironhelmrepo.Explorables")]
+[assembly: InternalsVisibleTo("ironhelmrepo.Tests1")]

@@ -138,7 +138,7 @@ namespace Iron_helm_order_mgt
 
         }
 
-        public double calculateTotalCost(List<OrderLineItem> lines)
+        public double calculateTotalCost(List<OrderLineItem> lines, double packageCost, double deliveryCost)
         {
             double tcost = 0;
             //List<OrderLineItem> lines = this.OrderLineItems.ToList();
